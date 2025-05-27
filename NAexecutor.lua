@@ -340,3 +340,11 @@ updateEditorSize()
 
 r()
 u()
+
+local CoreGui = game:GetService("StarterGui")
+
+CoreGui:SetCore("SendNotification", {
+    Title = "Executer",
+    Text = "successfully loaded",
+    Duration = 2.5,
+})
