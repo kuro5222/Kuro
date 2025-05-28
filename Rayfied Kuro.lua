@@ -86,7 +86,7 @@ end)
 
 local lastPos = nil
 
-Tab:CreateButton({
+PlayerTab:CreateButton({
     Name = "Set Position",
     Callback = function()
         local char = player.Character or player.CharacterAdded:Wait()
@@ -100,7 +100,7 @@ Tab:CreateButton({
     end
 })
 
-Tab:CreateButton({
+PlayerTab:CreateButton({
     Name = "Teleport to Saved Position",
     Callback = function()
         if lastPos then
