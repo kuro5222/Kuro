@@ -30,7 +30,7 @@ local StatusTab = Window:CreateTab("Status", 4483362458)
 local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:-- --")
 local UTCTimeLabel = StatusTab:CreateLabel("UTC time: --:--:-- --")
 local PlayerCountLabel = StatusTab:CreateLabel("Current players: --")
-local PosLabel = StatusTab:CreateLabel("Position: --, --, --")
+local StatusPosLabel = StatusTab:CreateLabel("Position: --, --, --")
 
 spawn(function()
     while true do
@@ -51,35 +51,24 @@ Players.PlayerRemoving:Connect(updatePlayerCount)
 
 updatePlayerCount()
 
-spawn(function()
-    while true do
-        local character = player.Character or player.CharacterAdded:Wait()
-        local hrp = character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            local pos = hrp.Position
-            PosLabel:Set(string.format("Position: %.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z))
-        else
-            PosLabel:Set("Position: --, --, --")
-        end
-        wait(0.1)
-    end
-end)
-
 local PlayerTab = Window:CreateTab("Player", 4483362458)
 
-local PosLabel = PlayerTab:CreateLabel("Position: --, --, --")
+local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
 spawn(function()
     while true do
         local character = player.Character or player.CharacterAdded:Wait()
         local hrp = character:FindFirstChild("HumanoidRootPart")
+        local posText
         if hrp then
             local pos = hrp.Position
-            PosLabel:Set(string.format("Position: %.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z))
+            posText = string.format("Position: %.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z)
         else
-            PosLabel:Set("Position: --, --, --")
+            posText = "Position: --, --, --"
         end
+        StatusPosLabel:Set(posText)
+        PlayerPosLabel:Set(posText)
         wait(0.1)
     end
 end)
@@ -109,11 +98,6 @@ PlayerTab:CreateButton({
             if hrp then
                 hrp.CFrame = lastPos
                 StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.X, lastPos.Y, lastPos.Z))
-                Rayfield:Notify({
-                    Title = "Teleported",
-                    Content = "You have been teleported to the saved position.",
-                    Duration = 2
-                })
             else
                 StatusLabel:Set("Could not find HumanoidRootPart.")
             end
@@ -173,7 +157,7 @@ Players.LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
-local WalkSpeed = PlayerTab:CreateInput({
+PlayerTab:CreateInput({
    Name = "WalkSpeed",
    CurrentValue = "16",
    PlaceholderText = "Set Speed",
@@ -239,7 +223,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Third Person",
     Callback = function()
-        player.CameraMaxZoomDistance = math.huge
+        player.CameraMaxZoomDistance-math.huge
         player.CameraMode="Classic"
     end
 })
@@ -258,58 +242,59 @@ PlayerTab:CreateInput({
 
 local GuiTab = Window:CreateTab("Gui", 4483362458)
 
-local Keyboard = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Keyboard",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end
 })
 
-local Notepad = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Notepad",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
     end
 })
 
-local Tpu = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Tpu",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
     end
 })
 
-local console = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "console",
     Callback = function()
         StarterGui:SetCore("DevConsoleVisible", true)
     end
 })
 
-local SimpleSpy = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Simple Spy",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
     end
 })
 
-local ShiftLock = GuiTab:CreateButton({
-    Name = " ShiftLock",
+GuiTab:CreateButton({
+    Name = "ShiftLock",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
     end
 })
 
-local Destroy = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Destroy Rayfield",
     Callback = function()
         Rayfield:Destroy()
     end
 })
-local Crash = GuiTab:CreateButton({
+GuiTab:CreateButton({
     Name = "Crash💀",
     Callback = function()
         while true do
         end
     end
 })
+
