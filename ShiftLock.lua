@@ -22,8 +22,6 @@ ShiftLock.Image = "rbxasset://textures/ui/mouseLock_off.png"
 end
 end)
 
-
---ShiftLock Operator
 game:GetService('RunService').RenderStepped:connect(function()
 if ShiftLockMode == true then
 local root = game.Players.LocalPlayer.Character.HumanoidRootPart
