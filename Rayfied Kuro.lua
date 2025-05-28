@@ -6,7 +6,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "Kuro test",
-   Icon = 0,
+   Icon = nil,
    LoadingTitle = "Loading...",
    LoadingSubtitle = "",
    Theme = "Default",
@@ -31,6 +31,7 @@ local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:-- --")
 local UTCTimeLabel = StatusTab:CreateLabel("UTC time: --:--:-- --")
 local PlayerCountLabel = StatusTab:CreateLabel("Current players: --")
 local PosLabel = StatusTab:CreateLabel("Position: --, --, --")
+
 spawn(function()
     while true do
         local localTime = os.date("%I:%M:%S %p")
@@ -65,6 +66,62 @@ spawn(function()
 end)
 
 local PlayerTab = Window:CreateTab("Player", 4483362458)
+
+local PosLabel = PlayerTab:CreateLabel("Position: --, --, --")
+local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
+
+spawn(function()
+    while true do
+        local character = player.Character or player.CharacterAdded:Wait()
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local pos = hrp.Position
+            PosLabel:Set(string.format("Position: %.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z))
+        else
+            PosLabel:Set("Position: --, --, --")
+        end
+        wait(0.1)
+    end
+end)
+
+local lastPos = nil
+
+Tab:CreateButton({
+    Name = "Set Position",
+    Callback = function()
+        local char = player.Character or player.CharacterAdded:Wait()
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            lastPos = hrp.CFrame
+            StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.X, lastPos.Y, lastPos.Z))
+        else
+            StatusLabel:Set("Could not find HumanoidRootPart.")
+        end
+    end
+})
+
+Tab:CreateButton({
+    Name = "Teleport to Saved Position",
+    Callback = function()
+        if lastPos then
+            local char = player.Character or player.CharacterAdded:Wait()
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                hrp.CFrame = lastPos
+                StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.X, lastPos.Y, lastPos.Z))
+                Rayfield:Notify({
+                    Title = "Teleported",
+                    Content = "You have been teleported to the saved position.",
+                    Duration = 2
+                })
+            else
+                StatusLabel:Set("Could not find HumanoidRootPart.")
+            end
+        else
+            StatusLabel:Set("No position saved yet.")
+        end
+    end
+})
 
 local noclipEnabled = false
 local noclipConnection
@@ -130,7 +187,7 @@ if character and character:FindFirstChild("Humanoid") then
     end,
 })
 
-local JumpPower = PlayerTab:CreateInput({
+PlayerTab:CreateInput({
    Name = "JumpPower",
    CurrentValue = "50",
    PlaceholderText = "Set Power",
@@ -144,14 +201,14 @@ if character and character:FindFirstChild("Humanoid") then
     end,
 })
 
-local FlyButton = PlayerTab:CreateButton({
+PlayerTab:CreateButton({
    Name = "Fly gui",
    Callback = function()
        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
    end,
 })
 
-local luluButton = PlayerTab:CreateButton({
+PlayerTab:CreateButton({
     Name = "lulu 🤨🤨",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
@@ -159,16 +216,6 @@ local luluButton = PlayerTab:CreateButton({
 })
 
 PlayerTab:CreateButton({
-    Name = "No interaction",
-    Callback = function()
-        while true do
-wait(0,3)
-for i,v in ipairs(game:GetService("Workspace"):GetDescendants()) do if v.ClassName == "ProximityPrompt" then v.HoldDuration = 0 end end
-        end
-    end
-})
-
-local reset = PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
         local player = Players.LocalPlayer
@@ -182,22 +229,22 @@ local reset = PlayerTab:CreateButton({
     end
 })
 
-local 1stPerson = PlayerTab:CreateButton({
+PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
-        Player.CameraMode="LockFirstPerson"
+        player.CameraMode="LockFirstPerson"
     end
 })
 
-local 3rdPerson = PlayerTab:CreateButton({
+PlayerTab:CreateButton({
     Name = "Third Person",
     Callback = function()
-        Player.CameraMaxZoomDistance-math.huge
-        Player.CameraMode="Classic"
+        player.CameraMaxZoomDistance = math.huge
+        player.CameraMode="Classic"
     end
 })
 
-local MaxZoom = PlayerTab:CreateInput({
+PlayerTab:CreateInput({
     Name = "Max Zoom",
     CurrentValue = "",
     PlaceholderText = "Place Zoom Distance",
@@ -266,4 +313,3 @@ local Crash = GuiTab:CreateButton({
         end
     end
 })
-
