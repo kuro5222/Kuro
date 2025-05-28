@@ -2,7 +2,14 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+end)
+
+if not success or not Rayfield then
+    warn("Failed to load Rayfield!")
+    return
+end
 
 local Window = Rayfield:CreateWindow({
    Name = "Kuro test",
@@ -32,7 +39,7 @@ local UTCTimeLabel = StatusTab:CreateLabel("UTC time: --:--:-- --")
 local PlayerCountLabel = StatusTab:CreateLabel("Current players: --")
 local StatusPosLabel = StatusTab:CreateLabel("Position: --, --, --")
 
-spawn(function()
+task.spawn(function()
     while true do
         local localTime = os.date("%I:%M:%S %p")
         local utcTime = os.date("!%I:%M:%S %p")
@@ -56,7 +63,7 @@ local PlayerTab = Window:CreateTab("Player", 4483362458)
 local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
-spawn(function()
+task.spawn(function()
     while true do
         local character = player.Character or player.CharacterAdded:Wait()
         local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -164,11 +171,12 @@ PlayerTab:CreateInput({
    RemoveTextAfterFocusLost = false,
    Flag = "Speed",
    Callback = function(Value)
-       local character = Players.LocalPlayer.Character
-if character and character:FindFirstChild("Humanoid") then
-    character.Humanoid.WalkSpeed = tonumber(Value)
-        end
-    end,
+    local character = Players.LocalPlayer.Character
+    local num = tonumber(Value)
+    if character and character:FindFirstChild("Humanoid") and num then
+        character.Humanoid.WalkSpeed = num
+    end
+end,
 })
 
 PlayerTab:CreateInput({
@@ -178,11 +186,12 @@ PlayerTab:CreateInput({
    RemoveTextAfterFocusLost = false,
    Flag = "JumpPower",
    Callback = function(Value)
-      local character = Players.LocalPlayer.Character
-if character and character:FindFirstChild("Humanoid") then
-    character.Humanoid.JumpPower = tonumber(Value)
-        end
-    end,
+    local character = Players.LocalPlayer.Character
+    local num = tonumber(Value)
+    if character and character:FindFirstChild("Humanoid") and num then
+        character.Humanoid.JumpPower = num
+    end
+end,
 })
 
 PlayerTab:CreateButton({
@@ -223,7 +232,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Third Person",
     Callback = function()
-        player.CameraMaxZoomDistance-math.huge
+        player.CameraMaxZoomDistance = math.huge
         player.CameraMode="Classic"
     end
 })
