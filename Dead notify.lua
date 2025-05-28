@@ -15,7 +15,7 @@ end
 game:GetService('RunService').Heartbeat:connect(function()for _, v in pairs(game.Players:GetPlayers()) do
     if v.Name ~= game.Players.LocalPlayer.Name then
         if v.Character.Humanoid.Health == 0 or v.Character.Humanoid.Health <= 0 then
-            message = v.Name.." Bro died💀"
+            message = v.Name.." Died💀"
             Notify()
             v.Character:Destroy()
             end
@@ -30,7 +30,7 @@ LocalPlayerDied = false
             if LocalPlayerDied == false then
                 if not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") or game.Players.LocalPlayer.Character.Humanoid.Health == 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
     LocalPlayerDied = true
-    message = game.Players.LocalPlayer.Name.." Bro died💀"
+    message = game.Players.LocalPlayer.Name.."Died💀"
     Notify()
 end
 else
