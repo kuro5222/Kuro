@@ -231,7 +231,7 @@ Title.Parent = TopBar
 Title.BackgroundTransparency = 1
 Title.Size = UDim2.new(1, 0, 1, 0)
 Title.Font = Enum.Font.GothamSemibold
-Title.Text = "Nigger shut up"
+Title.Text = "Notepad :3"
 Title.TextColor3 = Color3.fromRGB(240, 240, 255)
 Title.TextSize = 15
 
