@@ -197,7 +197,7 @@ PlayerTab:CreateInput({
 })
 
 PlayerTab:CreateButton({
-    Name = "Fly gui",
+    Name = "🪶Fly gui",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
     end
@@ -254,14 +254,14 @@ PlayerTab:CreateInput({
 local GuiTab = Window:CreateTab("Gui", 4483362458)
 
 GuiTab:CreateButton({
-    Name = "Keyboard",
+    Name = "⌨️Keyboard",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end
 })
 
 GuiTab:CreateButton({
-    Name = "Notepad",
+    Name = "📒Notepad",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
     end
@@ -275,7 +275,7 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "console",
+    Name = "📂console",
     Callback = function()
         StarterGui:SetCore("DevConsoleVisible", true)
     end
@@ -289,7 +289,14 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "ShiftLock",
+    Name = "🗂️Dex v3",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/dexv3.lua"))()
+    end
+})
+
+GuiTab:CreateButton({
+    Name = "🔒ShiftLock",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
     end
