@@ -291,7 +291,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/dexv3.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
     end
 })
 
