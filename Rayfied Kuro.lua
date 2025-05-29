@@ -1,35 +1,39 @@
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
-local success, Rayfield = pcall(function()
-    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-end)
 
+local Rayfield
+local success, err = pcall(function()
+    Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+end)
 if not success or not Rayfield then
-    warn("Failed to load Rayfield!")
+    warn("Failed to load Rayfield!", err)
     return
 end
 
 local Window = Rayfield:CreateWindow({
-   Name = "Kuro test",
-   Icon = nil,
-   LoadingTitle = "Loading...",
-   LoadingSubtitle = "",
-   Theme = "Default",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = nil,
-      FileName = "Kuro Rayfield"
-   },
-
-   Discord = {
-      Enabled = false,
-      Invite = "noinvitelink",
-      RememberJoins = true
-   },
-
-   KeySystem = false
+    Name = "Kuro test",
+    Icon = nil,
+    LoadingTitle = "Loading...",
+    LoadingSubtitle = "Just for Fun lol",
+    Theme = "Default",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = nil,
+        FileName = "Kuro Rayfield"
+    },
+    Discord = {
+        Enabled = false,
+        Invite = "noinvitelink",
+        RememberJoins = true
+    },
+    KeySystem = false
 })
 
 local StatusTab = Window:CreateTab("Status", 4483362458)
@@ -55,7 +59,6 @@ end
 
 Players.PlayerAdded:Connect(updatePlayerCount)
 Players.PlayerRemoving:Connect(updatePlayerCount)
-
 updatePlayerCount()
 
 local PlayerTab = Window:CreateTab("Player", 4483362458)
@@ -132,7 +135,6 @@ local function setNoclip(state)
             end)
         end
     else
-        
         if noclipConnection then
             noclipConnection:Disconnect()
             noclipConnection = nil
@@ -165,47 +167,47 @@ Players.LocalPlayer.CharacterAdded:Connect(function()
 end)
 
 PlayerTab:CreateInput({
-   Name = "WalkSpeed",
-   CurrentValue = "16",
-   PlaceholderText = "Set Speed",
-   RemoveTextAfterFocusLost = false,
-   Flag = "Speed",
-   Callback = function(Value)
-    local character = Players.LocalPlayer.Character
-    local num = tonumber(Value)
-    if character and character:FindFirstChild("Humanoid") and num then
-        character.Humanoid.WalkSpeed = num
+    Name = "WalkSpeed",
+    CurrentValue = "16",
+    PlaceholderText = "Set Speed",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Speed",
+    Callback = function(Value)
+        local character = Players.LocalPlayer.Character
+        local num = tonumber(Value)
+        if character and character:FindFirstChild("Humanoid") and num then
+            character.Humanoid.WalkSpeed = num
+        end
     end
-end,
 })
 
 PlayerTab:CreateInput({
-   Name = "JumpPower",
-   CurrentValue = "50",
-   PlaceholderText = "Set Power",
-   RemoveTextAfterFocusLost = false,
-   Flag = "JumpPower",
-   Callback = function(Value)
-    local character = Players.LocalPlayer.Character
-    local num = tonumber(Value)
-    if character and character:FindFirstChild("Humanoid") and num then
-        character.Humanoid.JumpPower = num
+    Name = "JumpPower",
+    CurrentValue = "50",
+    PlaceholderText = "Set Power",
+    RemoveTextAfterFocusLost = false,
+    Flag = "JumpPower",
+    Callback = function(Value)
+        local character = Players.LocalPlayer.Character
+        local num = tonumber(Value)
+        if character and character:FindFirstChild("Humanoid") and num then
+            character.Humanoid.JumpPower = num
+        end
     end
-end,
 })
 
 PlayerTab:CreateButton({
-   Name = "Fly gui",
-   Callback = function()
-       loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
-   end,
+    Name = "Fly gui",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
+    end
 })
 
 PlayerTab:CreateButton({
     Name = "lulu 🤨🤨",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
-    end,
+    end
 })
 
 PlayerTab:CreateButton({
@@ -225,7 +227,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
-        player.CameraMode="LockFirstPerson"
+        player.CameraMode = Enum.CameraMode.LockFirstPerson
     end
 })
 
@@ -233,7 +235,7 @@ PlayerTab:CreateButton({
     Name = "Third Person",
     Callback = function()
         player.CameraMaxZoomDistance = math.huge
-        player.CameraMode="Classic"
+        player.CameraMode = Enum.CameraMode.Classic
     end
 })
 
@@ -299,10 +301,10 @@ GuiTab:CreateButton({
         Rayfield:Destroy()
     end
 })
+
 GuiTab:CreateButton({
     Name = "Crash💀",
     Callback = function()
-        while true do
-        end
+        while true do end
+    end
 })
-
