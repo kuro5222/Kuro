@@ -304,6 +304,5 @@ GuiTab:CreateButton({
     Callback = function()
         while true do
         end
-    end
 })
 
