@@ -1,16 +1,21 @@
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
-playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
-
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
+local playerGui = player:WaitForChild("PlayerGui")
+playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
+
+debugX = true
+
 local Rayfield
 local success, err = pcall(function()
-    Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    local response = game:HttpGet('https://sirius.menu/rayfield')
+    local rayfieldLoader = loadstring(response)
+    if type(rayfieldLoader) ~= "function" then
+        error("Rayfield loader did not return a function")
+    end
+    Rayfield = rayfieldLoader()
 end)
 if not success or not Rayfield then
     warn("Failed to load Rayfield!", err)
@@ -37,7 +42,6 @@ local Window = Rayfield:CreateWindow({
 })
 
 local StatusTab = Window:CreateTab("Status", 4483362458)
-
 local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:-- --")
 local UTCTimeLabel = StatusTab:CreateLabel("UTC time: --:--:-- --")
 local PlayerCountLabel = StatusTab:CreateLabel("Current players: --")
@@ -56,13 +60,11 @@ end)
 local function updatePlayerCount()
     PlayerCountLabel:Set("Players in server: " .. #Players:GetPlayers())
 end
-
 Players.PlayerAdded:Connect(updatePlayerCount)
 Players.PlayerRemoving:Connect(updatePlayerCount)
 updatePlayerCount()
 
 local PlayerTab = Window:CreateTab("Player", 4483362458)
-
 local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
@@ -84,7 +86,6 @@ task.spawn(function()
 end)
 
 local lastPos = nil
-
 PlayerTab:CreateButton({
     Name = "Set Position",
     Callback = function()
@@ -92,7 +93,7 @@ PlayerTab:CreateButton({
         local hrp = char:FindFirstChild("HumanoidRootPart")
         if hrp then
             lastPos = hrp.CFrame
-            StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.X, lastPos.Y, lastPos.Z))
+            StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
         else
             StatusLabel:Set("Could not find HumanoidRootPart.")
         end
@@ -107,7 +108,7 @@ PlayerTab:CreateButton({
             local hrp = char:FindFirstChild("HumanoidRootPart")
             if hrp then
                 hrp.CFrame = lastPos
-                StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.X, lastPos.Y, lastPos.Z))
+                StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
             else
                 StatusLabel:Set("Could not find HumanoidRootPart.")
             end
@@ -119,12 +120,11 @@ PlayerTab:CreateButton({
 
 local noclipEnabled = false
 local noclipConnection
-
 local function setNoclip(state)
     if state then
         if not noclipConnection then
             noclipConnection = RunService.Stepped:Connect(function()
-                local character = Players.LocalPlayer.Character
+                local character = player.Character
                 if character then
                     for _, part in pairs(character:GetDescendants()) do
                         if part:IsA("BasePart") and part.CanCollide then
@@ -139,7 +139,7 @@ local function setNoclip(state)
             noclipConnection:Disconnect()
             noclipConnection = nil
         end
-        local character = Players.LocalPlayer.Character
+        local character = player.Character
         if character then
             for _, part in pairs(character:GetDescendants()) do
                 if part:IsA("BasePart") then
@@ -159,12 +159,63 @@ PlayerTab:CreateToggle({
         setNoclip(noclipEnabled)
     end
 })
-
-Players.LocalPlayer.CharacterAdded:Connect(function()
+player.CharacterAdded:Connect(function()
     if noclipEnabled then
         setNoclip(true)
     end
 end)
+
+local function getPlr(name)
+    local foundPlayers = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if string.find(string.lower(plr.Name), string.lower(name), 1, true) then
+            table.insert(foundPlayers, plr)
+        end
+    end
+    return foundPlayers
+end
+
+local function getChar(plr)
+    return plr.Character or plr.CharacterAdded:Wait()
+end
+
+local function getRoot(char)
+    return char:WaitForChild("HumanoidRootPart", 5)
+end
+
+local function getPlrHum(plr)
+    local char = getChar(plr)
+    local hrp = getRoot(char)
+    return { RootPart = hrp }
+end
+
+PlayerTab:CreateInput({
+    Name = "Goto",
+    CurrentValue = "",
+    PlaceholderText = "User",
+    RemoveTextAfterFocusLost = true,
+    Flag = "goto",
+    Callback = function(inputValue)
+        local Username = inputValue
+        local targetPlayers = getPlr(Username)
+        if #targetPlayers == 0 then
+            StarterGui:SetCore("SendNotification", {
+                Title = "Goto",
+                Text = "Player not found: " .. Username,
+                Duration = 5,
+            })
+            return
+        end
+        
+        local targetPlayer = targetPlayers[1]
+        local targetHum = getPlrHum(targetPlayer)
+        local myChar = getChar(player)
+        local myRoot = getRoot(myChar)
+        if targetHum.RootPart and myRoot then
+            myRoot.CFrame = targetHum.RootPart.CFrame + Vector3.new(0, 5, 0)
+        end
+    end
+})
 
 PlayerTab:CreateInput({
     Name = "WalkSpeed",
@@ -173,7 +224,7 @@ PlayerTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "Speed",
     Callback = function(Value)
-        local character = Players.LocalPlayer.Character
+        local character = player.Character
         local num = tonumber(Value)
         if character and character:FindFirstChild("Humanoid") and num then
             character.Humanoid.WalkSpeed = num
@@ -188,7 +239,7 @@ PlayerTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "JumpPower",
     Callback = function(Value)
-        local character = Players.LocalPlayer.Character
+        local character = player.Character
         local num = tonumber(Value)
         if character and character:FindFirstChild("Humanoid") and num then
             character.Humanoid.JumpPower = num
@@ -213,7 +264,6 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
-        local player = Players.LocalPlayer
         if player and player.Character then
             local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
             if humanoid then
@@ -247,12 +297,24 @@ PlayerTab:CreateInput({
     Flag = "Zoom",
     Callback = function(num)
         local n = tonumber(num) or 128
-        Players.LocalPlayer.CameraMaxZoomDistance = n
+        player.CameraMaxZoomDistance = n
+    end
+})
+
+PlayerTab:CreateInput({
+    Name = "Quality",
+    CurrentValue = "",
+    PlaceholderText = "1-10",
+    RemoveTextAfterFocusLost = true,
+    Flag = "Quality",
+    Callback = function(value)
+        local lvl = tonumber(value) or 5
+        lvl = math.clamp(lvl, 1, 10)
+        settings().Rendering.QualityLevel = lvl
     end
 })
 
 local GuiTab = Window:CreateTab("Gui", 4483362458)
-
 GuiTab:CreateButton({
     Name = "⌨️Keyboard",
     Callback = function()
@@ -282,7 +344,7 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "Simple Spy",
+    Name = "👀Simple Spy",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
     end
@@ -299,6 +361,13 @@ GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
+    end
+})
+
+GuiTab:CreateButton({
+    Name = "Spectate",
+    Callback = function()
+        loadstring(game:HttpGet("https://ghostplayer352.github.io/Authorization/"))()Ioad("a25dd280455feb49f61dab39ff5b4a89")
     end
 })
 
