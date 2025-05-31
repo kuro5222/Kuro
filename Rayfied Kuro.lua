@@ -1,12 +1,10 @@
-local Players = game:GetService("Players")
+--[[local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
 local playerGui = player:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
-
-debugX = true
 
 local Rayfield
 local success, err = pcall(function()
