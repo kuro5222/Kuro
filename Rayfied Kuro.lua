@@ -1,11 +1,21 @@
+-- Services
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 
-local playerGui = player:WaitForChild("PlayerGui")
+-- Variables
+local LocalPlayer = Players.LocalPlayer
+local jumpEnabled = true
+local noclipEnabled = false
+local noclipConnection
+local lastPos = nil
+
+-- Ensure PlayerGui orientation
+local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
+-- Load Rayfield
 local Rayfield
 local success, err = pcall(function()
     local response = game:HttpGet('https://sirius.menu/rayfield')
@@ -20,8 +30,16 @@ if not success or not Rayfield then
     return
 end
 
+-- Notification
+StarterGui:SetCore("SendNotification", {
+    Title = "Welcome",
+    Text = "Kuro GUI Loaded",
+    Duration = 5
+})
+
+-- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
-    Name = "Kuro test",
+    Name = "Kuro GUI",
     Icon = nil,
     LoadingTitle = "Loading...",
     LoadingSubtitle = "Just for Fun lol",
@@ -39,12 +57,14 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false
 })
 
+-- Status Tab
 local StatusTab = Window:CreateTab("Status", 4483362458)
-local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:-- --")
-local UTCTimeLabel = StatusTab:CreateLabel("UTC time: --:--:-- --")
-local PlayerCountLabel = StatusTab:CreateLabel("Current players: --")
+local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:--")
+local UTCTimeLabel = StatusTab:CreateLabel("UTC Time: --:--:--")
+local PlayerCountLabel = StatusTab:CreateLabel("Players: --")
 local StatusPosLabel = StatusTab:CreateLabel("Position: --, --, --")
 
+-- Update Time
 task.spawn(function()
     while true do
         local localTime = os.date("%I:%M:%S %p")
@@ -55,6 +75,7 @@ task.spawn(function()
     end
 end)
 
+-- Update Player Count
 local function updatePlayerCount()
     PlayerCountLabel:Set("Players in server: " .. #Players:GetPlayers())
 end
@@ -62,33 +83,28 @@ Players.PlayerAdded:Connect(updatePlayerCount)
 Players.PlayerRemoving:Connect(updatePlayerCount)
 updatePlayerCount()
 
+-- Player Tab
 local PlayerTab = Window:CreateTab("Player", 4483362458)
 local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
+-- Update Player Position
 task.spawn(function()
     while true do
-        local character = player.Character or player.CharacterAdded:Wait()
+        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         local hrp = character:FindFirstChild("HumanoidRootPart")
-        local posText
-        if hrp then
-            local pos = hrp.Position
-            posText = string.format("Position: %.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z)
-        else
-            posText = "Position: --, --, --"
-        end
+        local posText = hrp and string.format("Position: %.2f, %.2f, %.2f", hrp.Position.X, hrp.Position.Y, hrp.Position.Z) or "Position: --, --, --"
         StatusPosLabel:Set(posText)
         PlayerPosLabel:Set(posText)
         wait(0.1)
     end
 end)
 
-local lastPos = nil
+-- Save Position
 PlayerTab:CreateButton({
     Name = "Set Position",
     Callback = function()
-        local char = player.Character or player.CharacterAdded:Wait()
-        local hrp = char:FindFirstChild("HumanoidRootPart")
+        local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         if hrp then
             lastPos = hrp.CFrame
             StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
@@ -98,12 +114,12 @@ PlayerTab:CreateButton({
     end
 })
 
+-- Teleport to Saved Position
 PlayerTab:CreateButton({
     Name = "Teleport to Saved Position",
     Callback = function()
         if lastPos then
-            local char = player.Character or player.CharacterAdded:Wait()
-            local hrp = char:FindFirstChild("HumanoidRootPart")
+            local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
                 hrp.CFrame = lastPos
                 StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
@@ -116,16 +132,15 @@ PlayerTab:CreateButton({
     end
 })
 
-local noclipEnabled = false
-local noclipConnection
+-- Noclip Functionality
 local function setNoclip(state)
     if state then
         if not noclipConnection then
             noclipConnection = RunService.Stepped:Connect(function()
-                local character = player.Character
+                local character = LocalPlayer.Character
                 if character then
                     for _, part in pairs(character:GetDescendants()) do
-                        if part:IsA("BasePart") and part.CanCollide then
+                        if part:IsA("BasePart") then
                             part.CanCollide = false
                         end
                     end
@@ -137,7 +152,7 @@ local function setNoclip(state)
             noclipConnection:Disconnect()
             noclipConnection = nil
         end
-        local character = player.Character
+        local character = LocalPlayer.Character
         if character then
             for _, part in pairs(character:GetDescendants()) do
                 if part:IsA("BasePart") then
@@ -157,103 +172,115 @@ PlayerTab:CreateToggle({
         setNoclip(noclipEnabled)
     end
 })
-player.CharacterAdded:Connect(function()
+
+LocalPlayer.CharacterAdded:Connect(function()
     if noclipEnabled then
         setNoclip(true)
     end
 end)
 
+-- Function to get players by name or display name
 local function getPlr(name)
     local foundPlayers = {}
     for _, plr in ipairs(Players:GetPlayers()) do
-        if string.find(string.lower(plr.Name), string.lower(name), 1, true) then
+        local searchName = string.lower(name)
+        local usernameMatch = string.find(string.lower(plr.Name), searchName, 1, true)
+        local displayNameMatch = plr.DisplayName and string.find(string.lower(plr.DisplayName), searchName, 1, true)
+        if usernameMatch or displayNameMatch then
             table.insert(foundPlayers, plr)
         end
     end
     return foundPlayers
 end
 
-local function getChar(plr)
-    return plr.Character or plr.CharacterAdded:Wait()
-end
-
-local function getRoot(char)
-    return char:WaitForChild("HumanoidRootPart", 5)
-end
-
-local function getPlrHum(plr)
-    local char = getChar(plr)
-    local hrp = getRoot(char)
-    return { RootPart = hrp }
-end
-
+-- Goto Functionality
 PlayerTab:CreateInput({
     Name = "Goto",
     CurrentValue = "",
-    PlaceholderText = "User",
+    PlaceholderText = "Enter Player Name",
     RemoveTextAfterFocusLost = true,
     Flag = "goto",
     Callback = function(inputValue)
-        local Username = inputValue
-        local targetPlayers = getPlr(Username)
+        local targetPlayers = getPlr(inputValue)
         if #targetPlayers == 0 then
             StarterGui:SetCore("SendNotification", {
-                Title = "Goto",
-                Text = "Player not found: " .. Username,
-                Duration = 5,
+                Title = "Player " .. inputValue,
+                Text = "❌NOT FOUND❌",
+                Duration = 2.5,
             })
             return
         end
-        
+
         local targetPlayer = targetPlayers[1]
-        local targetHum = getPlrHum(targetPlayer)
-        local myChar = getChar(player)
-        local myRoot = getRoot(myChar)
-        if targetHum.RootPart and myRoot then
-            myRoot.CFrame = targetHum.RootPart.CFrame + Vector3.new(0, 5, 0)
+        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
+        local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+
+        if targetRoot and myRoot then
+            myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
+            StarterGui:SetCore("SendNotification", {
+                Title = "Teleported to " .. targetPlayer.Name,
+                Text = "SUCCESS",
+                Duration = 2.5,
+            })
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Player " .. targetPlayer.Name,
+                Text = "Failed❌",
+                Duration = 2.5,
+            })
         end
     end
 })
 
-PlayerTab:CreateInput({
-    Name = "WalkSpeed",
-    CurrentValue = "16",
-    PlaceholderText = "Set Speed",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Speed",
+PlayerTab:CreateToggle({
+    Name = "Noclip",
+    CurrentValue = false,
+    Flag = "NoclipToggle",
     Callback = function(Value)
-        local character = player.Character
-        local num = tonumber(Value)
-        if character and character:FindFirstChild("Humanoid") and num then
-            character.Humanoid.WalkSpeed = num
-        end
+        noclipEnabled = Value
+        setNoclip(noclipEnabled)
     end
 })
 
-PlayerTab:CreateInput({
-    Name = "JumpPower",
-    CurrentValue = "50",
-    PlaceholderText = "Set Power",
-    RemoveTextAfterFocusLost = false,
-    Flag = "JumpPower",
+LocalPlayer.CharacterAdded:Connect(function()
+    if noclipEnabled then
+        setNoclip(true)
+    end
+end)
+
+-- Jump Override Toggle
+PlayerTab:CreateToggle({
+    Name = "Enable Jump Override",
+    CurrentValue = false,
+    Flag = "JumpOverrideToggle",
     Callback = function(Value)
-        local character = player.Character
-        local num = tonumber(Value)
-        if character and character:FindFirstChild("Humanoid") and num then
-            character.Humanoid.JumpPower = num
-        end
-    end
+        jumpEnabled = Value
+    end,
 })
 
+UserInputService.JumpRequest:Connect(function()
+    if jumpEnabled then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        else
+            warn("Humanoid not found!")
+        end
+    end
+end)
+
+-- Other Buttons and Inputs
 PlayerTab:CreateButton({
-    Name = "🪶Fly gui",
+    Name = "🕊️Fly gui",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
     end
 })
 
 PlayerTab:CreateButton({
-    Name = "lulu 🤨🤨",
+    Name = "Jork",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
     end
@@ -262,8 +289,8 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
-        if player and player.Character then
-            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+        if LocalPlayer.Character then
+            local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
             if humanoid then
                 humanoid:ChangeState(Enum.HumanoidStateType.Dead)
                 humanoid.Health = 0
@@ -275,15 +302,15 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
-        player.CameraMode = Enum.CameraMode.LockFirstPerson
+        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
     end
 })
 
 PlayerTab:CreateButton({
     Name = "Third Person",
     Callback = function()
-        player.CameraMaxZoomDistance = math.huge
-        player.CameraMode = Enum.CameraMode.Classic
+        LocalPlayer.CameraMaxZoomDistance = 128
+        LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end
 })
 
@@ -295,7 +322,7 @@ PlayerTab:CreateInput({
     Flag = "Zoom",
     Callback = function(num)
         local n = tonumber(num) or 128
-        player.CameraMaxZoomDistance = n
+        LocalPlayer.CameraMaxZoomDistance = n
     end
 })
 
@@ -303,7 +330,7 @@ PlayerTab:CreateInput({
     Name = "Quality",
     CurrentValue = "",
     PlaceholderText = "1-10",
-    RemoveTextAfterFocusLost = true,
+    RemoveTextAfterFocusLost = false,
     Flag = "Quality",
     Callback = function(value)
         local lvl = tonumber(value) or 5
@@ -312,7 +339,11 @@ PlayerTab:CreateInput({
     end
 })
 
+-- GUI Tab
 local GuiTab = Window:CreateTab("Gui", 4483362458)
+
+-- Other GUI Buttons
+
 GuiTab:CreateButton({
     Name = "⌨️Keyboard",
     Callback = function()
@@ -363,9 +394,9 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "Spectate",
+    Name = "exec",
     Callback = function()
-        loadstring(game:HttpGet("https://ghostplayer352.github.io/Authorization/"))()Ioad("a25dd280455feb49f61dab39ff5b4a89")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))
     end
 })
 
