@@ -6,9 +6,9 @@ wait()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Joined%20Left.lua"))()
 
 wait()
---Notif died
+--[[Notif died
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Dead%20notify.lua"))()
 
-wait()
+wait()]]
 --shiftlock
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
