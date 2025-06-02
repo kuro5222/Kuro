@@ -99,7 +99,7 @@ PlayerTab:CreateButton({
         else
             StatusLabel:Set("Could not find HumanoidRootPart.")
         end
-    end
+    end,
 })
 
 -- Teleport to Saved Position
@@ -117,7 +117,7 @@ PlayerTab:CreateButton({
         else
             StatusLabel:Set("No position saved yet.")
         end
-    end
+    end,
 })
 
 -- Noclip Functionality
@@ -158,7 +158,7 @@ PlayerTab:CreateToggle({
     Callback = function(Value)
         noclipEnabled = Value
         setNoclip(noclipEnabled)
-    end
+    end,
 })
 
 LocalPlayer.CharacterAdded:Connect(function()
@@ -197,7 +197,7 @@ PlayerTab:CreateSlider({
    Flag = "Speed",
    Callback = function(Value)
        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-   end
+   end,
 })
 
 PlayerTab:CreateSlider({
@@ -209,21 +209,21 @@ PlayerTab:CreateSlider({
     Flag = "Power",
     Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-        end
+        end,
 })
 -- Other Buttons and Inputs
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
-    end
+    end,
 })
 
 PlayerTab:CreateButton({
     Name = "Jork",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
-    end
+    end,
 })
 
 PlayerTab:CreateButton({
@@ -236,14 +236,14 @@ PlayerTab:CreateButton({
                 humanoid.Health = 0
             end
         end
-    end
+    end,
 })
 
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
-    end
+    end,
 })
 
 PlayerTab:CreateButton({
@@ -251,7 +251,7 @@ PlayerTab:CreateButton({
     Callback = function()
         LocalPlayer.CameraMaxZoomDistance = 128
         LocalPlayer.CameraMode = Enum.CameraMode.Classic
-    end
+    end,
 })
 
 PlayerTab:CreateInput({
@@ -263,7 +263,7 @@ PlayerTab:CreateInput({
     Callback = function(num)
         local n = tonumber(num) or 128
         LocalPlayer.CameraMaxZoomDistance = n
-    end
+    end,
 })
 
 local utility = Window:CreateTab("Utility", "rewind")
@@ -320,21 +320,21 @@ utility:CreateInput({
                 Duration = 2.5,
             })
         end
-    end
+    end,
 })
 
 utility:CreateButton({
     Name = "Esp on",
     Callback = function(Value)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
-    end
+    end,
 })
 
 utility:CreateButton({
     Name = "Esp off",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
-    end
+    end,
 })
 
 utility:CreateInput({
@@ -347,7 +347,7 @@ utility:CreateInput({
         local lvl = tonumber(value) or 5
         lvl = math.clamp(lvl, 1, 10)
         settings().Rendering.QualityLevel = lvl
-    end
+    end,
 })
 
 -- GUI Tab
@@ -359,56 +359,56 @@ GuiTab:CreateButton({
     Name = "⌨️Keyboard",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "📒Notepad",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "Tpu",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "Exec",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
     Name = "Destroy Rayfield",
     Callback = function()
         Rayfield:Destroy()
-    end
+    end,
 })
 
 GuiTab:CreateButton({
@@ -433,5 +433,7 @@ wait(25)
 
 while true do
     end
-    end
+    end,
 })
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/3%20in%201.lua"))()
