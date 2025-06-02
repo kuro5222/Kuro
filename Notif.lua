@@ -1,4 +1,4 @@
--- Made by Leadmarker
+--[[ Made by Leadmarker
 local library = {accent = Color3.fromRGB(255, 255, 127), noti1 = {}, noti2 = {}}; do
     library.__index = library
     local TweenService = game:GetService('TweenService')
