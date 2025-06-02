@@ -167,24 +167,6 @@ LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
-
-
-PlayerTab:CreateToggle({
-    Name = "Noclip",
-    CurrentValue = false,
-    Flag = "NoclipToggle",
-    Callback = function(Value)
-        noclipEnabled = Value
-        setNoclip(noclipEnabled)
-    end
-})
-
-LocalPlayer.CharacterAdded:Connect(function()
-    if noclipEnabled then
-        setNoclip(true)
-    end
-end)
-
 -- Jump Override Toggle
 PlayerTab:CreateToggle({
     Name = "Enable Jump Override",
