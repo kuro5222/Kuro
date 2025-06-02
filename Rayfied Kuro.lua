@@ -40,9 +40,9 @@ local Window = Rayfield:CreateWindow({
 
 StarterGui:SetCore("SendNotification", {
     Title = "Weclome! " .. Players.LocalPlayer.DisplayName,
-    Text = "😏Whats up bby gurl😏",
+    Text = "WASUP BBY GURL😏😏🔥",
     Icon = "rbxthumb://type=AvatarHeadShot&id=" .. Players.LocalPlayer.UserId .. "&w=180&h=180 true",
-    Duration = 30
+    Duration = 5
 })
 
 -- Status Tab
@@ -412,8 +412,26 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "Crash💀",
+    Name = "😏 CLICK THIS KENNY 😏",
     Callback = function()
-        while true do end
+        for i = 5, 1, -1 do
+    StarterGui:SetCore("SendNotification", {
+        Title = tostring(i),
+        Text = "Good boy😏",
+        Duration = 1
+    })
+    wait(1)
+end
+
+StarterGui:SetCore("SendNotification", {
+    Title = "bye 😏 ugh",
+    Text = "hintayin mo :3",
+    Duration = 2
+})
+
+wait(25)
+
+while true do
+    end
     end
 })
