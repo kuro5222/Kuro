@@ -6,7 +6,7 @@ local StarterGui = game:GetService("StarterGui")
 
 -- Variables
 local LocalPlayer = Players.LocalPlayer
-local jumpEnabled = true
+local jumpEnabled = false
 local noclipEnabled = false
 local noclipConnection
 local lastPos = nil
@@ -16,26 +16,7 @@ local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
 -- Load Rayfield
-local Rayfield
-local success, err = pcall(function()
-    local response = game:HttpGet('https://sirius.menu/rayfield')
-    local rayfieldLoader = loadstring(response)
-    if type(rayfieldLoader) ~= "function" then
-        error("Rayfield loader did not return a function")
-    end
-    Rayfield = rayfieldLoader()
-end)
-if not success or not Rayfield then
-    warn("Failed to load Rayfield!", err)
-    return
-end
-
--- Notification
-StarterGui:SetCore("SendNotification", {
-    Title = "Welcome",
-    Text = "Kuro GUI Loaded",
-    Duration = 5
-})
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
@@ -55,6 +36,13 @@ local Window = Rayfield:CreateWindow({
         RememberJoins = true
     },
     KeySystem = false
+})
+
+StarterGui:SetCore("SendNotification", {
+    Title = "Weclome! " .. Players.LocalPlayer.DisplayName,
+    Text = "LOL 🔥🔥🔥",
+    Icon = "rbxthumb://type=AvatarHeadShot&id=" .. Players.LocalPlayer.UserId .. "&w=180&h=180 true",
+    Duration = 5
 })
 
 -- Status Tab
@@ -179,60 +167,7 @@ LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
--- Function to get players by name or display name
-local function getPlr(name)
-    local foundPlayers = {}
-    for _, plr in ipairs(Players:GetPlayers()) do
-        local searchName = string.lower(name)
-        local usernameMatch = string.find(string.lower(plr.Name), searchName, 1, true)
-        local displayNameMatch = plr.DisplayName and string.find(string.lower(plr.DisplayName), searchName, 1, true)
-        if usernameMatch or displayNameMatch then
-            table.insert(foundPlayers, plr)
-        end
-    end
-    return foundPlayers
-end
 
--- Goto Functionality
-PlayerTab:CreateInput({
-    Name = "Goto",
-    CurrentValue = "",
-    PlaceholderText = "Enter Player Name",
-    RemoveTextAfterFocusLost = true,
-    Flag = "goto",
-    Callback = function(inputValue)
-        local targetPlayers = getPlr(inputValue)
-        if #targetPlayers == 0 then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Player " .. inputValue,
-                Text = "❌NOT FOUND❌",
-                Duration = 2.5,
-            })
-            return
-        end
-
-        local targetPlayer = targetPlayers[1]
-        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
-        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
-        local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
-
-        if targetRoot and myRoot then
-            myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
-            StarterGui:SetCore("SendNotification", {
-                Title = "Teleported to " .. targetPlayer.Name,
-                Text = "SUCCESS",
-                Duration = 2.5,
-            })
-        else
-            StarterGui:SetCore("SendNotification", {
-                Title = "Player " .. targetPlayer.Name,
-                Text = "Failed❌",
-                Duration = 2.5,
-            })
-        end
-    end
-})
 
 PlayerTab:CreateToggle({
     Name = "Noclip",
@@ -271,6 +206,29 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
+PlayerTab:CreateSlider({
+   Name = "Walkseed",
+   Range = {0.1, 150},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "Speed",
+   Callback = function(Value)
+       game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end
+})
+
+PlayerTab:CreateSlider({
+    Name = "JumpPower",
+    Range = {10, 150},
+    Increment = 5,
+    Suffix = "Power",
+    CurrentValue = 50,
+    Flag = "Power",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+        end
+})
 -- Other Buttons and Inputs
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
@@ -326,7 +284,78 @@ PlayerTab:CreateInput({
     end
 })
 
-PlayerTab:CreateInput({
+local utility = Window:CreateTab("Utility", "rewind")
+
+-- Function to get players by name or display name
+local function getPlr(name)
+    local foundPlayers = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        local searchName = string.lower(name)
+        local usernameMatch = string.find(string.lower(plr.Name), searchName, 1, true)
+        local displayNameMatch = plr.DisplayName and string.find(string.lower(plr.DisplayName), searchName, 1, true)
+        if usernameMatch or displayNameMatch then
+            table.insert(foundPlayers, plr)
+        end
+    end
+    return foundPlayers
+end
+
+-- Goto Functionality
+utility:CreateInput({
+    Name = "Goto",
+    CurrentValue = "",
+    PlaceholderText = "Enter Player Name",
+    RemoveTextAfterFocusLost = true,
+    Flag = "goto",
+    Callback = function(inputValue)
+        local targetPlayers = getPlr(inputValue)
+        if #targetPlayers == 0 then
+            StarterGui:SetCore("SendNotification", {
+                Title = "Player " .. inputValue,
+                Text = "❌NOT FOUND❌",
+                Duration = 2.5,
+            })
+            return
+        end
+
+        local targetPlayer = targetPlayers[1]
+        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
+        local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+
+        if targetRoot and myRoot then
+            myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
+            StarterGui:SetCore("SendNotification", {
+                Title = "Teleported to " .. targetPlayer.Name,
+                Text = "SUCCESS",
+                Duration = 2.5,
+            })
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "Player " .. targetPlayer.Name,
+                Text = "Failed❌",
+                Duration = 2.5,
+            })
+        end
+    end
+})
+
+utility:CreateButton({
+    Name = "Esp on",
+    Callback = function(Value)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
+    end
+})
+
+utility:CreateButton({
+    Name = "Esp off",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
+    end
+})
+
+utility:CreateInput({
     Name = "Quality",
     CurrentValue = "",
     PlaceholderText = "1-10",
@@ -366,13 +395,6 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "📂console",
-    Callback = function()
-        StarterGui:SetCore("DevConsoleVisible", true)
-    end
-})
-
-GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
@@ -394,9 +416,9 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "exec",
+    Name = "Exec",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
     end
 })
 
