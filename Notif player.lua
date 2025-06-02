@@ -8,21 +8,21 @@ end
 
 local function notifyPlayerEvent(player, eventText)
     StarterGui:SetCore("SendNotification", {
-        Title = "Player",
-        Text = player.Name .. " has " .. eventText .. " the game!",
-        Duration = 3,
+        Title = "Player " .. player.Name ,
+        Text = " HAS😩 " .. eventText .. " THE GAME🔥! ",
+        Duration = 2.5,
         Icon = getAvatarIcon(player.UserId)
     })
 end
 
 Players.PlayerAdded:Connect(function(player)
     if player ~= Players.LocalPlayer then
-        notifyPlayerEvent(player, "joined")
+        notifyPlayerEvent(player, "JOINED😃")
     end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
     if player ~= Players.LocalPlayer then
-        notifyPlayerEvent(player, "left")
+        notifyPlayerEvent(player, "LEFT🙁")
     end
 end)
