@@ -40,9 +40,9 @@ local Window = Rayfield:CreateWindow({
 
 StarterGui:SetCore("SendNotification", {
     Title = "Weclome! " .. Players.LocalPlayer.DisplayName,
-    Text = "LOL 🔥🔥🔥",
+    Text = "😏Whats up bby gurl😏",
     Icon = "rbxthumb://type=AvatarHeadShot&id=" .. Players.LocalPlayer.UserId .. "&w=180&h=180 true",
-    Duration = 5
+    Duration = 30
 })
 
 -- Status Tab
