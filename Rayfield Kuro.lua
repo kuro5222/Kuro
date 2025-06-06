@@ -194,10 +194,10 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
-PlayerTab:CreateInput({
+local S = PlayerTab:CreateInput({
     Name = "⚡WalkSpeed",
     CurrentValue = "16",
-    PlaceholderText = "Input Speed",
+    PlaceholderText = "->Input Speed<-",
     RemoveTextAfterFocusLost = false,
     Flag = "Speed",
     Callback = function(Value)
@@ -210,31 +210,60 @@ PlayerTab:CreateInput({
     end,
 })
 
-PlayerTab:CreateSlider({
-    Name = "JumpPower",
-    Range = {10, 150},
-    Increment = 5,
-    Suffix = "Power",
-    CurrentValue = 50,
+local P = PlayerTab:CreateInput({
+    Name = "🦵JumpPower",
+    CurrentValue = "50",
+    PlaceholderText = "->Input JumpPower<-",
+    RemoveTextAfterFocusLost = false,
     Flag = "Power",
     Callback = function(Value)
-        local character = LocalPlayer.Character
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid.JumpPower = Value
+        local Power = tonumber(Value)
+        if Power then
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = Power
         else
-            warn("JumpPower: Humanoid not found!")
+            warn("Invalid JunpPower value: " .. tostring(Value))
         end
     end,
 })
 
--- Other Buttons and Inputs (WARNING: loadstring usage remains)
+PlayerTab:CreateButton({
+    Name = "Reset Speed",
+    Callback = function()
+        S:Set("16")
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = "Reset Jump",
+    Callback = function()
+        P:Set("50")
+    end,
+})
+
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
+local function CallFly(F)
+    if F == "Yes" then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
+    elseif F == "No" then
+    end
+end
+
+local Fly = Instance.new("BindableFunction")
+Fly.OnInvoke = CallFly
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Lilipad ka??",
+    Text = "🕊️🕊️🕊️",
+    Duration = 5,
+    Button1 = "Yes",
+    Button2 = "No",
+    Callback = Fly,
+        })
     end,
 })
+
 
 PlayerTab:CreateButton({
     Name = "Jork",
@@ -246,14 +275,29 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
-        local character = LocalPlayer.Character
+        local function CallDie(D)
+    if D == "Yes" then
+       local character = LocalPlayer.Character
         local humanoid = character and character:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-            -- humanoid.Health = 0
-        else
-            warn("Reset: Humanoid not found!")
+            print("Dies from cringe 😬 😬 ")
         end
+    elseif D == "No" then
+    end
+end
+
+local Die = Instance.new("BindableFunction")
+Die.OnInvoke = CallDie
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Hello!",
+    Text = "Fly?",
+    Duration = 5,
+    Button1 = "Yes",
+    Button2 = "No",
+    Callback = Die,
+})
     end,
 })
 
@@ -295,7 +339,24 @@ local UtilityTab = Window:CreateTab("Utility", "rewind") -- Correctly define Uti
 UtilityTab:CreateButton({
     Name = "Nameless Admin",
     Callback = function()
+        local function CallNa(NA)
+    if NA == "Yes" then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+    elseif NA == "No" then
+    end
+end
+
+local Na = Instance.new("BindableFunction")
+Na.OnInvoke = CallNa
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Execute",
+    Text = "Nameless Admin?",
+    Duration = 5,
+    Button1 = "Yes",
+    Button2 = "No",
+    Callback = Na,
+})
     end,
 })
 
@@ -406,19 +467,50 @@ UtilityTab:CreateSlider({
 UtilityTab:CreateButton({ -- Use UtilityTab
     Name = "Rejoin",
     Callback = function()
-        -- Only attempt if player exists
-        if LocalPlayer then
+        local function Rj(R)
+    if R == "Yes" then
+         if LocalPlayer then
             TeleportService:Teleport(game.PlaceId, LocalPlayer)
-        else
-            warn("Rejoin: LocalPlayer not found.")
         end
-    end,
+    elseif R == "No" then
+    end
+end
+
+local rejoin = Instance.new("BindableFunction")
+rejoin.OnInvoke = Rj
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Rejoin?",
+    Text = "",
+    Duration = 5,
+    Button1 = "Yes",
+    Button2 = "No",
+    Callback = rejoin,
+})
+end,
 })
 
 UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
-        game:Shutdown()
+        local function Shut(L)
+    if L == "Yes" then
+       game:Shutdown()
+    elseif L == "No" then
+    end
+end
+
+local Down = Instance.new("BindableFunction")
+Down.OnInvoke = Shut
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Leave?",
+    Text = "",
+    Duration = 5,
+    Button1 = "Yes",
+    Button2 = "No",
+    Callback = Down,
+})
     end,
 })
 
@@ -477,13 +569,15 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "SICRET SCREPT",
     Callback = function()
-        for i = 5, 1, -1 do
+        local function Lol(Secret)
+    if Secret == "YUH UH" then
+         for i = 5, 1, -1 do
             StarterGui:SetCore("SendNotification", {
                 Title = tostring(i),
                 Text = "⚠️⚠️⚠️",
                 Duration = 1
             })
-            task.wait(1) -- Use task.wait
+            task.wait(1)
         end
 
         StarterGui:SetCore("SendNotification", {
@@ -498,5 +592,22 @@ GuiTab:CreateButton({
         task.wait(1.5)
         while true do
     end
+        end
+        elseif Secret == "NAH UH" then
+    game:Shutdown()
+    end
+
+local Dumb = Instance.new("BindableFunction")
+Dumb.OnInvoke = Lol
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "DUDE WHY DID YOU CLICK IT?",
+    Text = "still wanna continue?",
+    Duration = 5,
+    Button1 = "YUH UH",
+    Button2 = "NAH UH",
+    Callback = Dumb,
+})
+        
 end,
 })
