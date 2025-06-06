@@ -4,6 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local TeleportService = game:GetService("TeleportService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 
 -- Variables
 local LocalPlayer = Players.LocalPlayer
@@ -11,6 +12,7 @@ local jumpEnabled = false
 local noclipEnabled = false
 local noclipConnection
 local lastPos = nil
+local instantInteractEnabled = false
 
 -- Ensure PlayerGui orientation
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -56,16 +58,16 @@ local StatusPosLabel = StatusTab:CreateLabel("Position: --, --, --")
 -- Update Time (using task.spawn and task.wait)
 task.spawn(function()
     while task.wait(0.5) do -- Use task.wait
-        local localTime = os.date("%I:%M:%S %p")
-        local utcTime = os.date("!%I:%M:%S %p")
-        LocalTimeLabel:Set("Local Time: " .. localTime)
-        UTCTimeLabel:Set("UTC Time: " .. utcTime)
+    local localTime = os.date("%I:%M:%S %p")
+    local utcTime = os.date("!%I:%M:%S %p")
+    LocalTimeLabel:Set("Local Time: " .. localTime)
+    UTCTimeLabel:Set("UTC Time: " .. utcTime)
     end
-end)
+    end)
 
 -- Update Player Count
 local function updatePlayerCount()
-    PlayerCountLabel:Set("Players in server: " .. #Players:GetPlayers())
+PlayerCountLabel:Set("Players in server: " .. #Players:GetPlayers())
 end
 Players.PlayerAdded:Connect(updatePlayerCount)
 Players.PlayerRemoving:Connect(updatePlayerCount)
@@ -79,29 +81,29 @@ local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 -- Update Player Position (using task.spawn and task.wait, with checks)
 task.spawn(function()
     while task.wait(0.1) do -- Use task.wait
-        local character = LocalPlayer.Character
-        local hrp = character and character:FindFirstChild("HumanoidRootPart") -- Check character first
-        local posText = "Position: --, --, --"
-        if hrp then
-            posText = string.format("Position: %.2f, %.2f, %.2f", hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
-        end
-        StatusPosLabel:Set(posText)
-        PlayerPosLabel:Set(posText)
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart") -- Check character first
+    local posText = "Position: --, --, --"
+    if hrp then
+    posText = string.format("Position: %.2f, %.2f, %.2f", hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
     end
-end)
+    StatusPosLabel:Set(posText)
+    PlayerPosLabel:Set(posText)
+    end
+    end)
 
 -- Save Position
 PlayerTab:CreateButton({
     Name = "Set Position",
     Callback = function()
-        local character = LocalPlayer.Character
-        local hrp = character and character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            lastPos = hrp.CFrame
-            StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
-        else
-            StatusLabel:Set("Could not find HumanoidRootPart. Make sure your character is loaded.")
-        end
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+    lastPos = hrp.CFrame
+    StatusLabel:Set(string.format("Saved Position: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
+    else
+        StatusLabel:Set("Could not find HumanoidRootPart. Make sure your character is loaded.")
+    end
     end,
 })
 
@@ -109,50 +111,50 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Teleport to Saved Position",
     Callback = function()
-        if lastPos then
-            local character = LocalPlayer.Character
-            local hrp = character and character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                -- Teleport with a small vertical offset to prevent clipping into the ground
-                hrp.CFrame = lastPos + Vector3.new(0, 1, 0)
-                StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
-            else
-                StatusLabel:Set("Could not find HumanoidRootPart. Make sure your character is loaded.")
-            end
-        else
-            StatusLabel:Set("No position saved yet.")
-        end
+    if lastPos then
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+-- Teleport with a small vertical offset to prevent clipping into the ground
+    hrp.CFrame = lastPos + Vector3.new(0, 1, 0)
+    StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
+    else
+        StatusLabel:Set("Could not find HumanoidRootPart. Make sure your character is loaded.")
+    end
+    else
+        StatusLabel:Set("No position saved yet.")
+    end
     end,
 })
 
 local function setNoclip(state)
-    if state then
-        if not noclipConnection then
-            noclipConnection = RunService.Stepped:Connect(function()
-                local character = LocalPlayer.Character
-                if character then
-                    for _, part in pairs(character:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-        end
-    else
-        if noclipConnection then
-            noclipConnection:Disconnect()
-            noclipConnection = nil
-        end
-        local character = LocalPlayer.Character
-        if character then
-            for _, part in pairs(character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = true
-                end
-            end
-        end
+if state then
+if not noclipConnection then
+noclipConnection = RunService.Stepped:Connect(function()
+    local character = LocalPlayer.Character
+    if character then
+    for _, part in pairs(character:GetDescendants()) do
+    if part:IsA("BasePart") then
+    part.CanCollide = false
     end
+    end
+    end
+    end)
+end
+else
+    if noclipConnection then
+noclipConnection:Disconnect()
+noclipConnection = nil
+end
+local character = LocalPlayer.Character
+if character then
+for _, part in pairs(character:GetDescendants()) do
+if part:IsA("BasePart") then
+part.CanCollide = true
+end
+end
+end
+end
 end
 
 
@@ -161,16 +163,16 @@ PlayerTab:CreateToggle({
     CurrentValue = false,
     Flag = "NoclipToggle",
     Callback = function(Value)
-        noclipEnabled = Value
-        setNoclip(noclipEnabled)
+    noclipEnabled = Value
+    setNoclip(noclipEnabled)
     end,
 })
 
 LocalPlayer.CharacterAdded:Connect(function()
     if noclipEnabled then
-        setNoclip(true)
+    setNoclip(true)
     end
-end)
+    end)
 
 -- Jump Override Toggle
 PlayerTab:CreateToggle({
@@ -178,21 +180,21 @@ PlayerTab:CreateToggle({
     CurrentValue = false,
     Flag = "JumpOverrideToggle",
     Callback = function(Value)
-        jumpEnabled = Value
+    jumpEnabled = Value
     end,
 })
 
 UserInputService.JumpRequest:Connect(function()
     if jumpEnabled then
-        local character = LocalPlayer.Character
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        else
-            warn("JumpRequest: Humanoid not found!")
-        end
+    local character = LocalPlayer.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    else
+        warn("JumpRequest: Humanoid not found!")
     end
-end)
+    end
+    end)
 
 local S = PlayerTab:CreateInput({
     Name = "⚡WalkSpeed",
@@ -201,12 +203,12 @@ local S = PlayerTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "Speed",
     Callback = function(Value)
-        local speed = tonumber(Value)
-        if speed then
-            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
-        else
-            warn("Invalid WalkSpeed value: " .. tostring(Value))
-        end
+    local speed = tonumber(Value)
+    if speed then
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
+    else
+        warn("Invalid WalkSpeed value: " .. tostring(Value))
+    end
     end,
 })
 
@@ -217,50 +219,33 @@ local P = PlayerTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "Power",
     Callback = function(Value)
-        local Power = tonumber(Value)
-        if Power then
-            game.Players.LocalPlayer.Character.Humanoid.JumpPower = Power
-        else
-            warn("Invalid JunpPower value: " .. tostring(Value))
-        end
+    local Power = tonumber(Value)
+    if Power then
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = Power
+    else
+        warn("Invalid JumpPower value: " .. tostring(Value))
+    end
     end,
 })
 
 PlayerTab:CreateButton({
     Name = "Reset Speed",
     Callback = function()
-        S:Set("16")
+    S:Set("16")
     end,
 })
 
 PlayerTab:CreateButton({
     Name = "Reset Jump",
     Callback = function()
-        P:Set("50")
+    P:Set("50")
     end,
 })
 
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
-local function CallFly(F)
-    if F == "Yes" then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
-    elseif F == "No" then
-    end
-end
-
-local Fly = Instance.new("BindableFunction")
-Fly.OnInvoke = CallFly
-
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Lilipad ka??",
-    Text = "🕊️🕊️🕊️",
-    Duration = 5,
-    Button1 = "Yes",
-    Button2 = "No",
-    Callback = Fly,
-        })
     end,
 })
 
@@ -268,68 +253,58 @@ game.StarterGui:SetCore("SendNotification", {
 PlayerTab:CreateButton({
     Name = "Jork",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
     end,
 })
 
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
-        local function CallDie(D)
+    local function CallDie(D)
     if D == "Yes" then
-       local character = LocalPlayer.Character
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-            print("Dies from cringe 😬 😬 ")
-        end
+    local character = LocalPlayer.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+    humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+    print("Dies from cringe 😬 😬 ")
+    end
     elseif D == "No" then
     end
-end
+    end
 
-local Die = Instance.new("BindableFunction")
-Die.OnInvoke = CallDie
+    local Die = Instance.new("BindableFunction")
+    Die.OnInvoke = CallDie
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Hello!",
-    Text = "Fly?",
-    Duration = 5,
-    Button1 = "Yes",
-    Button2 = "No",
-    Callback = Die,
-})
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Hello!",
+        Text = "Fly?",
+        Duration = 5,
+        Button1 = "Yes",
+        Button2 = "No",
+        Callback = Die,
+    })
     end,
 })
 
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
-        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
+    LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
     end,
 })
 
 PlayerTab:CreateButton({
-    Name = "Third Person",
+    Name = "Normal Zoom",
     Callback = function()
-        LocalPlayer.CameraMaxZoomDistance = 128
-        LocalPlayer.CameraMode = Enum.CameraMode.Classic
+    LocalPlayer.CameraMaxZoomDistance = 128
+    LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end,
 })
 
-PlayerTab:CreateInput({
-    Name = "Max Zoom",
-    CurrentValue = "128",
-    PlaceholderText = "Place Zoom Distance",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Zoom",
-    Callback = function(num)
-        local n = tonumber(num)
-        if n then
-            LocalPlayer.CameraMaxZoomDistance = math.clamp(n, 0.5, 500) -- Clamp zoom to reasonable values
-        else
-            warn("Max Zoom: Invalid input, setting to default.")
-            LocalPlayer.CameraMaxZoomDistance = 128 -- Default if invalid
-        end
+PlayerTab:CreateButton({
+    Name = "Inf Zoom",
+    Callback = function()
+    Player.CameraMaxZoomDistance-math.huge Player.CameraMode="Classic"
     end,
 })
 
@@ -339,98 +314,113 @@ local UtilityTab = Window:CreateTab("Utility", "rewind") -- Correctly define Uti
 UtilityTab:CreateButton({
     Name = "Nameless Admin",
     Callback = function()
-        local function CallNa(NA)
+    local function CallNa(NA)
     if NA == "Yes" then
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
     elseif NA == "No" then
     end
-end
+    end
 
-local Na = Instance.new("BindableFunction")
-Na.OnInvoke = CallNa
+    local Na = Instance.new("BindableFunction")
+    Na.OnInvoke = CallNa
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Execute",
-    Text = "Nameless Admin?",
-    Duration = 5,
-    Button1 = "Yes",
-    Button2 = "No",
-    Callback = Na,
-})
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Execute",
+        Text = "Nameless Admin?",
+        Duration = 5,
+        Button1 = "Yes",
+        Button2 = "No",
+        Callback = Na,
+    })
     end,
 })
 
 -- Function to get players by name or display name
 local function getPlr(name)
-    local foundPlayers = {}
-    local searchNameLower = string.lower(name)
-    for _, plr in ipairs(Players:GetPlayers()) do
-        local usernameLower = string.lower(plr.Name)
-        local displayNameLower = plr.DisplayName and string.lower(plr.DisplayName)
-        
-        local usernameMatch = string.find(usernameLower, searchNameLower, 1, true)
-        local displayNameMatch = displayNameLower and string.find(displayNameLower, searchNameLower, 1, true)
-        
-        if usernameMatch or displayNameMatch then
-            table.insert(foundPlayers, plr)
-        end
-    end
-    return foundPlayers
+local foundPlayers = {}
+local searchNameLower = string.lower(name)
+for _, plr in ipairs(Players:GetPlayers()) do
+local usernameLower = string.lower(plr.Name)
+local displayNameLower = plr.DisplayName and string.lower(plr.DisplayName)
+
+local usernameMatch = string.find(usernameLower, searchNameLower, 1, true)
+local displayNameMatch = displayNameLower and string.find(displayNameLower, searchNameLower, 1, true)
+
+if usernameMatch or displayNameMatch then
+table.insert(foundPlayers, plr)
+end
+end
+return foundPlayers
 end
 
 -- Goto Functionality
 UtilityTab:CreateInput({
     Name = "Goto",
     CurrentValue = "",
-    PlaceholderText = "--Enter Player Name",
+    PlaceholderText = "->Enter Name<-",
     RemoveTextAfterFocusLost = true,
     Flag = "goto",
     Callback = function(inputValue)
-        local targetPlayers = getPlr(inputValue)
-        if #targetPlayers == 0 then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Player " .. inputValue,
-                Text = "❌NOT FOUND❌",
-                Duration = 2.5,
-            })
-            return
-        end
+    local targetPlayers = getPlr(inputValue)
+    if #targetPlayers == 0 then
+    StarterGui:SetCore("SendNotification", {
+        Title = "Player " .. inputValue,
+        Text = "❌NOT FOUND❌",
+        Duration = 2.5,
+    })
+    return
+    end
 
-        local targetPlayer = targetPlayers[1]
-        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
-        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
-        
-        local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+    local targetPlayer = targetPlayers[1]
+    local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+    local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
 
-        if targetRoot and myRoot then
-            myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
-            StarterGui:SetCore("SendNotification", {
-                Title = "Teleported to " .. targetPlayer.Name,
-                Text = "SUCCESS",
-                Duration = 2.5,
-            })
-        else
-            StarterGui:SetCore("SendNotification", {
-                Title = "Teleport Failed",
-                Text = "Could not find target or your character parts.",
-                Duration = 2.5,
-            })
-        end
+    local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+
+    if targetRoot and myRoot then
+    myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
+    StarterGui:SetCore("SendNotification", {
+        Title = "Teleported to " .. targetPlayer.Name,
+        Text = "SUCCESS",
+        Duration = 2.5,
+    })
+    else
+        StarterGui:SetCore("SendNotification", {
+        Title = "Teleport Failed",
+        Text = "Could not find target or your character parts.",
+        Duration = 2.5,
+    })
+    end
     end,
 })
 
 UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function(Value)
-            loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
     end,
 })
 
 UtilityTab:CreateButton({
     Name = "Esp off",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
+    end,
+})
+
+ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
+    if instantInteractEnabled then
+        fireproximityprompt(prompt)
+    end
+end)
+
+UtilityTab:CreateToggle({
+    Name = "Instant Interact",
+    CurrentValue = false,
+    Flag = "Interact",
+    Callback = function(Value)
+        instantInteractEnabled = Value
     end,
 })
 
@@ -441,76 +431,79 @@ UtilityTab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Flag = "Quality",
     Callback = function(value)
-        local lvl = tonumber(value)
-        if lvl then
-            lvl = math.clamp(lvl, 1, 10)
-            settings().Rendering.QualityLevel = lvl
-        else
-            warn("Quality: Invalid input, QualityLevel not changed.")
-        end
+    local lvl = tonumber(value)
+    if lvl then
+    lvl = math.clamp(lvl, 1, 10)
+    settings().Rendering.QualityLevel = lvl
+    else
+        warn("Quality: Invalid input, QualityLevel not changed.")
+    end
     end,
 })
 
 UtilityTab:CreateSlider({
     Name = "Time",
-    Range = {1, 24},
+    Range = {
+        1, 24
+    },
     Increment = 1,
     Suffix = "time",
     CurrentValue = 12,
     Flag = "time",
     Callback = function(v)
-        local hour = math.floor(v)
-        game.Lighting.TimeOfDay = string.format("%02d:00:00", hour)
+    local hour = math.floor(v)
+    game.Lighting.TimeOfDay = string.format("%02d:00:00", hour)
     end,
 })
 
-UtilityTab:CreateButton({ -- Use UtilityTab
+UtilityTab:CreateButton({
+-- Use UtilityTab
     Name = "Rejoin",
     Callback = function()
-        local function Rj(R)
+    local function Rj(R)
     if R == "Yes" then
-         if LocalPlayer then
-            TeleportService:Teleport(game.PlaceId, LocalPlayer)
-        end
+    if LocalPlayer then
+    TeleportService:Teleport(game.PlaceId, LocalPlayer)
+    end
     elseif R == "No" then
     end
-end
+    end
 
-local rejoin = Instance.new("BindableFunction")
-rejoin.OnInvoke = Rj
+    local rejoin = Instance.new("BindableFunction")
+    rejoin.OnInvoke = Rj
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Rejoin?",
-    Text = "",
-    Duration = 5,
-    Button1 = "Yes",
-    Button2 = "No",
-    Callback = rejoin,
-})
-end,
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Rejoin?",
+        Text = "",
+        Duration = 5,
+        Button1 = "Yes",
+        Button2 = "No",
+        Callback = rejoin,
+    })
+    end,
 })
 
 UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
-        local function Shut(L)
+    local function Shut(L)
     if L == "Yes" then
-       game:Shutdown()
+    game:Shutdown()
     elseif L == "No" then
     end
-end
+    end
 
-local Down = Instance.new("BindableFunction")
-Down.OnInvoke = Shut
+    local Down = Instance.new("BindableFunction")
+    Down.OnInvoke = Shut
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Leave?",
-    Text = "",
-    Duration = 5,
-    Button1 = "Yes",
-    Button2 = "No",
-    Callback = Down,
-})
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Leave?",
+        Text = "",
+        Duration = 5,
+        Button1 = "Yes",
+        Button2 = "No",
+        Callback = Down,
+    })
     end,
 })
 
@@ -520,94 +513,93 @@ local GuiTab = Window:CreateTab("Gui", 4483362458)
 GuiTab:CreateButton({
     Name = "⌨️Keyboard",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "📒Notepad",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "Universal Viewer",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
     Name = "Exec",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
     end,
 })
 
 GuiTab:CreateButton({
-    Name = "SICRET SCREPT",
+    Name = "⚠️SICRET SCREPT⚠️",
     Callback = function()
-        local function Lol(Secret)
+    local function Lol(Secret)
     if Secret == "YUH UH" then
-         for i = 5, 1, -1 do
-            StarterGui:SetCore("SendNotification", {
-                Title = tostring(i),
-                Text = "⚠️⚠️⚠️",
-                Duration = 1
-            })
-            task.wait(1)
-        end
+    for i = 5, 1, -1 do
+    StarterGui:SetCore("SendNotification", {
+        Title = tostring(i),
+        Text = "⚠️⚠️⚠️",
+        Duration = 1
+    })
+    task.wait(1)
+    end
 
-        StarterGui:SetCore("SendNotification", {
-            Title = "It's a prank",
-            Text = "Nothing happened, but why did you click it?🤨🤨",
-            Duration = 3
-        })
+    StarterGui:SetCore("SendNotification", {
+        Title = "It's a prank",
+        Text = "Nothing happened, but why did you click it?🤨🤨",
+        Duration = 3
+    })
     task.wait(25)
-    
+
     game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
-    
-        task.wait(1.5)
-        while true do
+
+    task.wait(1.5)
+    while true do
     end
+    elseif Secret == "NAH UH" then
+        game:Shutdown()
         end
-        elseif Secret == "NAH UH" then
-    game:Shutdown()
     end
+    local Dumb = Instance.new("BindableFunction")
+    Dumb.OnInvoke = Lol
 
-local Dumb = Instance.new("BindableFunction")
-Dumb.OnInvoke = Lol
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "DUDE WHY DID YOU CLICK IT?",
+        Text = "still wanna continue?",
+        Duration = 5,
+        Button1 = "YUH UH",
+        Button2 = "NAH UH",
+        Callback = Dumb,
+    })
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = "DUDE WHY DID YOU CLICK IT?",
-    Text = "still wanna continue?",
-    Duration = 5,
-    Button1 = "YUH UH",
-    Button2 = "NAH UH",
-    Callback = Dumb,
-})
-        
-end,
+    end,
 })
