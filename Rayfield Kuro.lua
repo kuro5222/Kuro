@@ -132,7 +132,7 @@ PlayerTab:CreateButton({
     Name = "Copy Position",
     Callback = function()
         setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-        print("Copied"," .. game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame .. ")
+        print("Copied", .. game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame .. )
     end,
 })
 
@@ -156,6 +156,7 @@ PlayerTab:CreateButton({
     Name = "Reset Speed",
     Callback = function()
         S:Set("")
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
     end,
 })
 
@@ -179,6 +180,7 @@ PlayerTab:CreateButton({
     Name = "Reset Jump",
     Callback = function()
         P:Set("")
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
     end,
 })
 
