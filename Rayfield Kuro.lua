@@ -128,14 +128,6 @@ PlayerTab:CreateButton({
     end,
 })
 
-PlayerTab:CreateButton({
-    Name = "Copy Position",
-    Callback = function()
-        setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-        print("Copied", tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-    end,
-})
-
 local S = PlayerTab:CreateInput({
     Name = "⚡WalkSpeed",
     CurrentValue = "",
@@ -156,7 +148,7 @@ PlayerTab:CreateButton({
     Name = "Reset Speed",
     Callback = function()
         S:Set("")
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed.Value = 16
     end,
 })
 
@@ -180,7 +172,15 @@ PlayerTab:CreateButton({
     Name = "Reset Jump",
     Callback = function()
         P:Set("")
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower.Value = 50
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = "Copy Position",
+    Callback = function()
+        setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
+        print("Copied", tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
     end,
 })
 
