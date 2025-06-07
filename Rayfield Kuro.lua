@@ -132,7 +132,7 @@ PlayerTab:CreateButton({
     Name = "Copy Position",
     Callback = function()
         setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-        print("Copied", .. game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame .. )
+        print("Copied", tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
     end,
 })
 
