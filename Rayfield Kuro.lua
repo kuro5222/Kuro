@@ -128,6 +128,52 @@ PlayerTab:CreateButton({
     end,
 })
 
+local S = PlayerTab:CreateInput({
+    Name = "⚡WalkSpeed",
+    CurrentValue = "",
+    PlaceholderText = "->Input Speed<-",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Speed",
+    Callback = function(Value)
+        local speed = tonumber(Value)
+        if speed then
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
+        else
+            warn("Invalid WalkSpeed value: " .. tostring(Value))
+        end
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = "Reset Speed",
+    Callback = function()
+        S:Set("")
+    end,
+})
+
+local P = PlayerTab:CreateInput({
+    Name = "🦵JumpPower",
+    CurrentValue = "",
+    PlaceholderText = "->Input JumpPower<-",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Power",
+    Callback = function(Value)
+        local Power = tonumber(Value)
+        if Power then
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = Power
+        else
+            warn("Invalid JumpPower value: " .. tostring(Value))
+        end
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = "Reset Jump",
+    Callback = function()
+        P:Set("")
+    end,
+})
+
 local function setNoclip(state)
     if state then
         if not noclipConnection then
@@ -196,52 +242,6 @@ UserInputService.JumpRequest:Connect(function()
     end
 end)
 
-local S = PlayerTab:CreateInput({
-    Name = "⚡WalkSpeed",
-    CurrentValue = "16",
-    PlaceholderText = "->Input Speed<-",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Speed",
-    Callback = function(Value)
-        local speed = tonumber(Value)
-        if speed then
-            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
-        else
-            warn("Invalid WalkSpeed value: " .. tostring(Value))
-        end
-    end,
-})
-
-local P = PlayerTab:CreateInput({
-    Name = "🦵JumpPower",
-    CurrentValue = "50",
-    PlaceholderText = "->Input JumpPower<-",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Power",
-    Callback = function(Value)
-        local Power = tonumber(Value)
-        if Power then
-            game.Players.LocalPlayer.Character.Humanoid.JumpPower = Power
-        else
-            warn("Invalid JumpPower value: " .. tostring(Value))
-        end
-    end,
-})
-
-PlayerTab:CreateButton({
-    Name = "Reset Speed",
-    Callback = function()
-        S:Set("16")
-    end,
-})
-
-PlayerTab:CreateButton({
-    Name = "Reset Jump",
-    Callback = function()
-        P:Set("50")
-    end,
-})
-
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
@@ -268,7 +268,6 @@ PlayerTab:CreateButton({
                     print("Dies from cringe 😬 😬 ")
                 end
             elseif D == "No" then
-                -- Do nothing
             end
         end
 
@@ -312,31 +311,6 @@ PlayerTab:CreateButton({
 -- Utility Tab (Renamed from 'utility' to avoid nil error)
 local UtilityTab = Window:CreateTab("Utility", "rewind") -- Correctly define UtilityTab
 
-UtilityTab:CreateButton({
-    Name = "Nameless Admin",
-    Callback = function()
-        local function CallNa(NA)
-            if NA == "Yes" then
-                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
-            elseif NA == "No" then
-                -- Do nothing
-            end
-        end
-
-        local Na = Instance.new("BindableFunction")
-        Na.OnInvoke = CallNa
-
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Execute",
-            Text = "Nameless Admin?",
-            Duration = 5,
-            Button1 = "Yes",
-            Button2 = "No",
-            Callback = Na,
-        })
-    end,
-})
-
 -- Function to get players by name or display name
 local function getPlr(name)
     local foundPlayers = {}
@@ -357,7 +331,7 @@ end
 UtilityTab:CreateInput({
     Name = "Goto",
     CurrentValue = "",
-    PlaceholderText = "->Enter Name<-",
+    PlaceholderText = "-> Enter Name <-",
     RemoveTextAfterFocusLost = true,
     Flag = "goto",
     Callback = function(inputValue)
@@ -395,6 +369,48 @@ UtilityTab:CreateInput({
     end,
 })
 
+UtilityTab:CreateInput({
+    Name = "Quality",
+    CurrentValue = "",
+    PlaceholderText = "-> Pick to 1-10 <-",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Quality",
+    Callback = function(value)
+        local lvl = tonumber(value)
+        if lvl then
+            lvl = math.clamp(lvl, 1, 10)
+            settings().Rendering.QualityLevel = lvl
+        else
+            warn("Quality: Invalid input, QualityLevel not changed.")
+        end
+    end,
+})
+
+UtilityTab:CreateButton({
+    Name = "Nameless Admin",
+    Callback = function()
+        local function CallNa(NA)
+            if NA == "Yes" then
+                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+            elseif NA == "No" then
+            end
+        end
+
+        local Na = Instance.new("BindableFunction")
+        Na.OnInvoke = CallNa
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Execute",
+            Text = "Nameless Admin?",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = Na,
+        })
+    end,
+})
+
+
 UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function()
@@ -424,23 +440,6 @@ UtilityTab:CreateToggle({
     end,
 })
 
-UtilityTab:CreateInput({
-    Name = "Quality",
-    CurrentValue = "",
-    PlaceholderText = "1-10",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Quality",
-    Callback = function(value)
-        local lvl = tonumber(value)
-        if lvl then
-            lvl = math.clamp(lvl, 1, 10)
-            settings().Rendering.QualityLevel = lvl
-        else
-            warn("Quality: Invalid input, QualityLevel not changed.")
-        end
-    end,
-})
-
 UtilityTab:CreateSlider({
     Name = "Time",
     Range = {1, 24},
@@ -463,7 +462,6 @@ UtilityTab:CreateButton({
                     TeleportService:Teleport(game.PlaceId, LocalPlayer)
                 end
             elseif R == "No" then
-                -- Do nothing
             end
         end
 
@@ -482,6 +480,46 @@ UtilityTab:CreateButton({
 })
 
 UtilityTab:CreateButton({
+    Name = "Server hop",
+    Callback = function()
+        local function Shop(Hop)
+            if Hop == "Yes" then
+             local Http = game:GetService("HttpService")
+local TPS = game:GetService("TeleportService")
+local Api = "https://games.roblox.com/v1/games/"
+local _place = game.PlaceId
+local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+function ListServers(cursor)
+  local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+  return Http:JSONDecode(Raw)
+end
+
+local Server, Next; repeat
+  local Servers = ListServers(Next)
+  Server = Servers.data[1]
+  Next = Servers.nextPageCursor
+until Server
+
+TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
+            elseif Hop == "No" then
+            end
+        end
+
+        local SHop = Instance.new("BindableFunction")
+        SHop.OnInvoke = Shop
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Server hop",
+            Text = "",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = SHop,
+        })
+    end,
+})
+
+UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
         local function Shut(L)
@@ -489,7 +527,6 @@ UtilityTab:CreateButton({
                 wait(2)
                 game:Shutdown()
             elseif L == "No" then
-                -- Do nothing
             end
         end
 
@@ -553,7 +590,7 @@ GuiTab:CreateButton({
 })
 
 GuiTab:CreateButton({
-    Name = "Exec",
+    Name = "Executor",
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
     end,
@@ -578,13 +615,14 @@ GuiTab:CreateButton({
                     Text = "Nothing happened, but why did you click it?🤨🤨",
                     Duration = 3
                 })
-                task.wait(25)
+                task.wait(60)
 
                 game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
 
                 task.wait(1.5)
                 while true do end
             elseif Secret == "NAH UH" then
+                task.wait(60)
                 game:Shutdown()
             end
         end
