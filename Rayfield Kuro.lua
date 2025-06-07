@@ -116,7 +116,6 @@ PlayerTab:CreateButton({
             local character = LocalPlayer.Character
             local hrp = character and character:FindFirstChild("HumanoidRootPart")
             if hrp then
-                -- Teleport with a small vertical offset to prevent clipping into the ground
                 hrp.CFrame = lastPos + Vector3.new(0, 1, 0)
                 StatusLabel:Set(string.format("Teleported to: X=%.2f, Y=%.2f, Z=%.2f", lastPos.Position.X, lastPos.Position.Y, lastPos.Position.Z))
             else
