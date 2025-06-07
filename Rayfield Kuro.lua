@@ -19,7 +19,7 @@ local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
 -- Load Rayfield
-local Rayfield = loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/kuro5222/Kuro/main/Rayfield%20ui%20Custom.lua'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
