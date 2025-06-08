@@ -539,7 +539,7 @@ UtilityTab:CreateButton({
     end,
 })
 
-UtilityTab:CreateButton({
+--[[UtilityTab:CreateButton({
     Name = "Server hop",
     Callback = function()
         local function Shop(Hop)
@@ -578,7 +578,7 @@ TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
             Callback = SHop,
         })
     end,
-})
+})]]
 
 UtilityTab:CreateButton({
     Name = "Leave",
