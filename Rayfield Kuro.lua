@@ -13,8 +13,9 @@ local noclipEnabled = false
 local noclipConnection
 local lastPos = nil
 local instantInteractEnabled = false
+local disablePromptConnection
 
--- Ensure PlayerGui orientation
+-- Auto execute
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
@@ -430,32 +431,6 @@ UtilityTab:CreateInput({
 })
 
 UtilityTab:CreateButton({
-    Name = "Nameless Admin",
-    Callback = function()
-        local function CallNa(NA)
-            if NA == "Yes" then
-                task.wait()
-                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
-            elseif NA == "No" then
-            end
-        end
-
-        local Na = Instance.new("BindableFunction")
-        Na.OnInvoke = CallNa
-
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Execute",
-            Text = "Nameless Admin?",
-            Duration = 5,
-            Button1 = "Yes",
-            Button2 = "No",
-            Callback = Na,
-        })
-    end,
-})
-
-
-UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
@@ -481,6 +456,46 @@ UtilityTab:CreateToggle({
     Flag = "Interact",
     Callback = function(Value)
         instantInteractEnabled = Value
+    end,
+})
+
+local function disablePrompts()
+    for _, obj in ipairs(game:GetDescendants()) do
+        if obj:IsA("ProximityPrompt") then
+            obj.Enabled = false
+        end
+    end
+
+disablePromptConnection = game.DescendantAdded:Connect(function(child)
+        if child:IsA("ProximityPrompt") then
+            child.Enabled = false
+        end
+    end)
+end
+
+local function enablePrompts()
+    for _, obj in ipairs(game:GetDescendants()) do
+        if obj:IsA("ProximityPrompt") then
+            obj.Enabled = true
+        end
+    end
+
+    if disablePromptConnection then
+        disablePromptConnection:Disconnect()
+        disablePromptConnection = nil
+    end
+end
+
+UtilityTab:CreateToggle({
+    Name = "Disable interact",
+    CurrentValue = true,
+    Flag = "interact2",
+    Callback = function(toggled)
+                if toggled then
+            disablePrompts()
+        else
+            enablePrompts()
+        end
     end,
 })
 
@@ -515,7 +530,7 @@ UtilityTab:CreateButton({
 
         game.StarterGui:SetCore("SendNotification", {
             Title = "Rejoin?",
-            Text = "",
+            Text = "⚠️",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
@@ -556,7 +571,7 @@ TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
 
         game.StarterGui:SetCore("SendNotification", {
             Title = "Server hop",
-            Text = "",
+            Text = "⚠️",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
@@ -581,12 +596,90 @@ UtilityTab:CreateButton({
 
         game.StarterGui:SetCore("SendNotification", {
             Title = "Leave?",
-            Text = "",
+            Text = "⚠️",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
             Callback = Down,
         })
+    end,
+})
+
+local Scripts = Rayfield:CreateTab("Scripts", nil)
+
+Scripts:CreateButton({
+    Name = "Nameless Admin",
+    Callback = function()
+        local function CallNa(NA)
+            if NA == "Yes" then
+                task.wait()
+                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+            elseif NA == "No" then
+            end
+        end
+
+        local Na = Instance.new("BindableFunction")
+        Na.OnInvoke = CallNa
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Execute",
+            Text = "Nameless Admin?",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = Na,
+        })
+    end,
+})
+
+Scripts:CreateButton({
+    Name = "Native",
+    Callback = function()
+        local function SN(Nate)
+            if Nate == "Yes" then
+                task.wait()
+                (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()
+            elseif Nate == "No" then
+            end
+        end
+
+        local N = Instance.new("BindableFunction")
+        N.OnInvoke = SN
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Execute",
+            Text = "Native?",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = N,
+        })
+    end,
+})
+
+Scripts:CreateButton({
+    Name = "No-lag",
+    Callback = function()
+                local function NL(Lag)
+            if Lag == "Yes" then
+                task.wait()
+                loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()
+            elseif Lag == "No" then
+            end
+        end
+
+        local Nl = Instance.new("BindableFunction")
+        Nl.OnInvoke = NL
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Execute",
+            Text = "No-Lag?",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = Nl,
+        })
+      
     end,
 })
 
@@ -686,4 +779,3 @@ GuiTab:CreateButton({
         })
     end,
 })
-
