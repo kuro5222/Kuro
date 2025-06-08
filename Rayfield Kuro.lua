@@ -64,7 +64,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 StarterGui:SetCore("SendNotification", {
-    Title = "MASTERRRRRRRR " .. LocalPlayer.DisplayName,
+    Title = "MASTER " .. LocalPlayer.DisplayName,
     Text = "📸📸📸",
     Icon = "rbxthumb://type=AvatarHeadShot&id=" .. LocalPlayer.UserId .. "&w=180&h=180",
     Duration = 5
@@ -415,7 +415,7 @@ UtilityTab:CreateInput({
 
 UtilityTab:CreateInput({
     Name = "Quality",
-    CurrentValue = ,
+    CurrentValue = "",
     PlaceholderText = "-> Pick 1-10 <-",
     RemoveTextAfterFocusLost = false,
     Flag = "Quality",
@@ -485,7 +485,6 @@ local function enablePrompts()
         disablePromptConnection = nil
     end
 end
-
 UtilityTab:CreateToggle({
     Name = "Disable interact",
     CurrentValue = true,
@@ -539,7 +538,7 @@ UtilityTab:CreateButton({
     end,
 })
 
---[[UtilityTab:CreateButton({
+UtilityTab:CreateButton({
     Name = "Server hop",
     Callback = function()
         local function Shop(Hop)
@@ -578,14 +577,14 @@ TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
             Callback = SHop,
         })
     end,
-})]]
+})
 
 UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
         local function Shut(L)
             if L == "Yes" then
-                task.wait(2)
+                task.wait(1.5)
                 game:Shutdown()
             elseif L == "No" then
             end
