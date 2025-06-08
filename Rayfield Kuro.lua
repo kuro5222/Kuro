@@ -605,7 +605,7 @@ UtilityTab:CreateButton({
     end,
 })
 
-local Scripts = Rayfield:CreateTab("Scripts", nil)
+local Scripts = Window:CreateTab("Scripts", nil)
 
 Scripts:CreateButton({
     Name = "Nameless Admin",
