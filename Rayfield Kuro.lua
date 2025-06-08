@@ -465,7 +465,7 @@ local function disablePrompts()
             obj.Enabled = false
         end
     end
-end
+
 disablePromptConnection = game.DescendantAdded:Connect(function(child)
         if child:IsA("ProximityPrompt") then
             child.Enabled = false
@@ -491,7 +491,7 @@ UtilityTab:CreateToggle({
     CurrentValue = true,
     Flag = "interact2",
     Callback = function(toggled)
-                if toggled then
+        if toggled then
             disablePrompts()
         else
             enablePrompts()
