@@ -14,7 +14,7 @@ local noclipEnabled = false
 local noclipConnection
 local lastPos = nil
 local instantInteractEnabled = false
---local disablePromptConnection
+local disablePromptConnection
 
 -- Auto execute
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -445,7 +445,7 @@ UtilityTab:CreateButton({
     end,
 })
 
-ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
+--[[ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
     if instantInteractEnabled then
         fireproximityprompt(prompt)
     end
@@ -458,9 +458,9 @@ UtilityTab:CreateToggle({
     Callback = function(Value)
         instantInteractEnabled = Value
     end,
-})
+})]]
 
---[[local function disablePrompts()
+local function disablePrompts()
     for _, obj in ipairs(game:GetDescendants()) do
         if obj:IsA("ProximityPrompt") then
             obj.Enabled = false
@@ -486,6 +486,7 @@ local function enablePrompts()
         disablePromptConnection = nil
     end
 end
+
 UtilityTab:CreateToggle({
     Name = "Disable interact",
     CurrentValue = true,
@@ -497,7 +498,7 @@ UtilityTab:CreateToggle({
             enablePrompts()
         end
     end,
-})]]
+})
 
 UtilityTab:CreateSlider({
     Name = "Time",
@@ -676,7 +677,30 @@ Scripts:CreateButton({
             Button2 = "No",
             Callback = SayLag
         })
-        
+    end,
+})
+
+Scripts:CreateButton({
+    Name = "SpeedX",
+    Callback = function()
+        local function CallSpeed(Speed)
+            if Speed == "Yes" then
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+            elseif Speed == "No" then
+            end
+        end
+
+        local SaySpeed = Instance.new("BindableFunction")
+        SaySpeed.OnInvoke = CallSpeed
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "EXECUTE",
+            Text = "SpeedX?",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = SaySpeed
+        })
     end,
 })
 
