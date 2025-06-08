@@ -1,3 +1,5 @@
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+
 -- Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
