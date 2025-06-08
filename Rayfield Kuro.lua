@@ -18,15 +18,36 @@ local instantInteractEnabled = false
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
+--Random Messages 😏
+local messages = {
+    "Want some milk?😝",
+    "Daisksuki😏🤭",
+    "Ohayo Sensie😏",
+    "Yoo Kenny is that you Kenny?",
+    "Yoo using me again!??"
+}
+
+local RM = messages[math.random(#messages)]
+
+local hour = tonumber(os.date("%H"))
+local GT = ""
+if hour >= 6 and hour < 12 then
+    GT = "Good Morning Darling🤭"
+elseif hour >= 12 and hour < 18 then
+    GT = "Goodaftie Darling😝"
+else
+    GY = "Good evening Darling dont stay up too late 😤"
+end
+
 -- Load Rayfield
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
-    Name = "Kuro GUI",
+    Name = GT,
     Icon = 0,
-    LoadingTitle = "Loading...",
-    LoadingSubtitle = "WHATS UP NIKA 🍆🥒",
+    LoadingTitle = RM,
+    LoadingSubtitle = "",
     Theme = "Default",
     ConfigurationSaving = {
         Enabled = true,
@@ -42,14 +63,14 @@ local Window = Rayfield:CreateWindow({
 })
 
 StarterGui:SetCore("SendNotification", {
-    Title = "Welcome " .. LocalPlayer.DisplayName,
-    Text = "How's are you bro?😏😘",
+    Title = "MASTERRRRRRRR " .. LocalPlayer.DisplayName,
+    Text = "📸📸📸",
     Icon = "rbxthumb://type=AvatarHeadShot&id=" .. LocalPlayer.UserId .. "&w=180&h=180",
     Duration = 5
 })
 
 -- Status Tab
-local StatusTab = Window:CreateTab("Status", 4483362458)
+local StatusTab = Window:CreateTab("Status", nil)
 local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:--")
 local UTCTimeLabel = StatusTab:CreateLabel("UTC Time: --:--:--")
 local PlayerCountLabel = StatusTab:CreateLabel("Players: --")
@@ -75,7 +96,7 @@ Players.PlayerRemoving:Connect(updatePlayerCount)
 updatePlayerCount()
 
 -- Player Tab
-local PlayerTab = Window:CreateTab("Player", 4483362458)
+local PlayerTab = Window:CreateTab("Player", nil)
 local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
@@ -155,7 +176,7 @@ PlayerTab:CreateButton({
     Name = "Reset Speed",
     Callback = function()
         S:Set("")
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed.Value = 16
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
     end,
 })
 
@@ -179,7 +200,7 @@ PlayerTab:CreateButton({
     Name = "Reset Jump",
     Callback = function()
         P:Set("")
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower.Value = 50
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
     end,
 })
 
@@ -295,6 +316,19 @@ PlayerTab:CreateButton({
 })
 
 PlayerTab:CreateButton({
+    Name = "Cam Noclip",
+    Callback = function()
+        Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = "Cam Clip",
+    Callback = function()
+        Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
+    end,
+})
+PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
@@ -318,7 +352,7 @@ PlayerTab:CreateButton({
 })
 
 -- Utility Tab (Renamed from 'utility' to avoid nil error)
-local UtilityTab = Window:CreateTab("Utility", "rewind") -- Correctly define UtilityTab
+local UtilityTab = Window:CreateTab("Utility", nil) -- Correctly define UtilityTab
 
 -- Function to get players by name or display name
 local function getPlr(name)
@@ -381,7 +415,7 @@ UtilityTab:CreateInput({
 UtilityTab:CreateInput({
     Name = "Quality",
     CurrentValue = "",
-    PlaceholderText = "-> Pick to 1-10 <-",
+    PlaceholderText = "-> Pick 1-10 <-",
     RemoveTextAfterFocusLost = false,
     Flag = "Quality",
     Callback = function(value)
@@ -400,6 +434,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function CallNa(NA)
             if NA == "Yes" then
+                task.wait()
                 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
             elseif NA == "No" then
             end
@@ -467,6 +502,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function Rj(R)
             if R == "Yes" then
+                task.wait
                 if LocalPlayer then
                     TeleportService:Teleport(game.PlaceId, LocalPlayer)
                 end
@@ -493,6 +529,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function Shop(Hop)
             if Hop == "Yes" then
+                task.wait()
              local Http = game:GetService("HttpService")
 local TPS = game:GetService("TeleportService")
 local Api = "https://games.roblox.com/v1/games/"
@@ -533,7 +570,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function Shut(L)
             if L == "Yes" then
-                wait(2)
+                task.wait(2)
                 game:Shutdown()
             elseif L == "No" then
             end
@@ -554,7 +591,7 @@ UtilityTab:CreateButton({
 })
 
 -- GUI Tab
-local GuiTab = Window:CreateTab("Gui", 4483362458)
+local GuiTab = Window:CreateTab("Gui", nil)
 
 GuiTab:CreateButton({
     Name = "⌨️Keyboard",
@@ -621,7 +658,7 @@ GuiTab:CreateButton({
 
                 StarterGui:SetCore("SendNotification", {
                     Title = "It's a prank",
-                    Text = "Nothing happened, but why did you click it?🤨🤨",
+                    Text = "Nothing happened, but why did you pick YUH UH?🤨",
                     Duration = 3
                 })
                 task.wait(60)
