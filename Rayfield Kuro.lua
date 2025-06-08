@@ -415,7 +415,7 @@ UtilityTab:CreateInput({
 
 UtilityTab:CreateInput({
     Name = "Quality",
-    CurrentValue = "",
+    CurrentValue = ,
     PlaceholderText = "-> Pick 1-10 <-",
     RemoveTextAfterFocusLost = false,
     Flag = "Quality",
@@ -465,7 +465,7 @@ local function disablePrompts()
             obj.Enabled = false
         end
     end
-
+end
 disablePromptConnection = game.DescendantAdded:Connect(function(child)
         if child:IsA("ProximityPrompt") then
             child.Enabled = false
