@@ -22,7 +22,7 @@ playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 --Random Messages 😏
 local messages = {
     "Want some milk?😝",
-    "Daisksuki😏🤭",
+    "Daiski😏🤭",
     "Ohayo Sensie😏",
     "Yoo Kenny is that you Kenny?",
     "Yoo using me again!??"
@@ -611,22 +611,21 @@ Scripts:CreateButton({
     Callback = function()
         local function CallNa(NA)
             if NA == "Yes" then
-                task.wait()
-                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
             elseif NA == "No" then
             end
         end
 
-        local Na = Instance.new("BindableFunction")
-        Na.OnInvoke = CallNa
+        local SayNa = Instance.new("BindableFunction")
+        SayNa.OnInvoke = CallNa
 
         game.StarterGui:SetCore("SendNotification", {
-            Title = "Execute",
-            Text = "Nameless Admin?",
+            Title = "EXECUTE",
+            Text = "Nameless-Admin?",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
-            Callback = Na,
+            Callback = SayNa
         })
     end,
 })
@@ -634,24 +633,23 @@ Scripts:CreateButton({
 Scripts:CreateButton({
     Name = "Native",
     Callback = function()
-        local function SN(Nate)
+        local function CallNate(Nate)
             if Nate == "Yes" then
-                task.wait()
-                (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()
+                (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()  
             elseif Nate == "No" then
             end
         end
 
-        local N = Instance.new("BindableFunction")
-        N.OnInvoke = SN
+        local SayNate = Instance.new("BindableFunction")
+        SayNate.OnInvoke = CallNate
 
         game.StarterGui:SetCore("SendNotification", {
-            Title = "Execute",
+            Title = "EXECUTE",
             Text = "Native?",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
-            Callback = N,
+            Callback = SayNate
         })
     end,
 })
@@ -659,34 +657,33 @@ Scripts:CreateButton({
 Scripts:CreateButton({
     Name = "No-lag",
     Callback = function()
-                local function NL(Lag)
+        local function CallLag(Lag)
             if Lag == "Yes" then
-                task.wait()
-                loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()
+                loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()  
             elseif Lag == "No" then
             end
         end
 
-        local Nl = Instance.new("BindableFunction")
-        Nl.OnInvoke = NL
+        local SayLag = Instance.new("BindableFunction")
+        SayLag.OnInvoke = CallLag
 
         game.StarterGui:SetCore("SendNotification", {
-            Title = "Execute",
-            Text = "No-Lag?",
+            Title = "EXECUTE",
+            Text = "No-lag?",
             Duration = 5,
             Button1 = "Yes",
             Button2 = "No",
-            Callback = Nl,
+            Callback = SayLag
         })
-      
+        
     end,
 })
 
--- GUI Tab
+--GUI Tab
 local GuiTab = Window:CreateTab("Gui", nil)
 
 GuiTab:CreateButton({
-    Name = "⌨️Keyboard",
+    Name = "⌨️keyboard",
     Callback = function()
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end,
@@ -778,4 +775,3 @@ GuiTab:CreateButton({
         })
     end,
 })
-
