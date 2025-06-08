@@ -1,12 +1,10 @@
-repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-
 -- Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local TeleportService = game:GetService("TeleportService")
-local ProximityPromptService = game:GetService("ProximityPromptService")
+--local ProximityPromptService = game:GetService("ProximityPromptService")
 
 -- Variables
 local LocalPlayer = Players.LocalPlayer
@@ -15,7 +13,7 @@ local noclipEnabled = false
 local noclipConnection
 local lastPos = nil
 local instantInteractEnabled = false
-local disablePromptConnection
+--local disablePromptConnection
 
 -- Auto execute
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -65,12 +63,12 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false
 })
 
-StarterGui:SetCore("SendNotification", {
+--[[StarterGui:SetCore("SendNotification", {
     Title = "MASTER " .. LocalPlayer.DisplayName,
     Text = "📸📸📸",
     Icon = "rbxthumb://type=AvatarHeadShot&id=" .. LocalPlayer.UserId .. "&w=180&h=180",
     Duration = 5
-})
+})]]
 
 -- Status Tab
 local StatusTab = Window:CreateTab("Status", nil)
@@ -446,7 +444,7 @@ UtilityTab:CreateButton({
     end,
 })
 
-ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
+--[[ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
     if instantInteractEnabled then
         fireproximityprompt(prompt)
     end
@@ -498,7 +496,7 @@ UtilityTab:CreateToggle({
             enablePrompts()
         end
     end,
-})
+})]]
 
 UtilityTab:CreateSlider({
     Name = "Time",
@@ -780,3 +778,4 @@ GuiTab:CreateButton({
         })
     end,
 })
+
