@@ -36,7 +36,7 @@ if hour >= 6 and hour < 12 then
 elseif hour >= 12 and hour < 18 then
     GT = "Goodaftie Darling😝"
 else
-    GY = "Good evening Darling dont stay up too late 😤"
+    GT = "Good evening Darling dont stay up too late 😤"
 end
 
 -- Load Rayfield
@@ -502,7 +502,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function Rj(R)
             if R == "Yes" then
-                task.wait
+                task.wait(0.5)
                 if LocalPlayer then
                     TeleportService:Teleport(game.PlaceId, LocalPlayer)
                 end
@@ -529,7 +529,7 @@ UtilityTab:CreateButton({
     Callback = function()
         local function Shop(Hop)
             if Hop == "Yes" then
-                task.wait()
+                task.wait(0.5)
              local Http = game:GetService("HttpService")
 local TPS = game:GetService("TeleportService")
 local Api = "https://games.roblox.com/v1/games/"
@@ -686,3 +686,4 @@ GuiTab:CreateButton({
         })
     end,
 })
+
