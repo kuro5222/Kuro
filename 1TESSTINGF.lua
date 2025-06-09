@@ -14,7 +14,7 @@ function KuroNotif.new()
     return self
 end
 
-function KuroNotif:DoNotif(customMessage)
+function KuroNotif:sendNotification(customMessage)
     customMessage = customMessage or "No message provided."
     
     local title = (LocalPlayer and LocalPlayer.DisplayName) or "Unknown Player"
