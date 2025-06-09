@@ -16,8 +16,7 @@ function WebhookNotifier.new()
     return self
 end
 
-function WebhookNotifier:sendNotification(customTitle, customMessage)
-    customTitle = customTitle or LocalPlayer.DisplayName
+function WebhookNotifier:sendNotification(customMessage)
     customMessage = customMessage or "No message provided."
 
     local timeNow = os.time()
@@ -33,27 +32,23 @@ function WebhookNotifier:sendNotification(customTitle, customMessage)
     )
 
     local embed = {
-        title = customTitle,
+        title = "TITLE",
         color = 11546102,
-        footer = { text = "" },
+        footer = { text = "FOOTER" },
         author = {
-            name = "Notify on script"
+            name = "Script logger"
         },
         fields = {
             {
-                name = "Used in | " .. gameName,
+                name = "Playing: " .. gameName,
                 value = game.JobId
-            },
-            {
-                name = "Message",
-                value = customMessage
             }
         },
         timestamp = timestamp
     }
 
     local payload = {
-        content = "",
+        content = "CONTENT",
         embeds = { embed }
     }
     
