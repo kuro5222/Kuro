@@ -35,9 +35,6 @@ function WebhookNotifier:sendNotification(customMessage)
         title = "Executed" .. customMessage,
         color = 11546102,
         footer = { text = "FOOTER" },
-        author = {
-            name = nil
-        },
         fields = {
             {
                 name = "Playing: " .. gameName,
