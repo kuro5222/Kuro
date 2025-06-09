@@ -18,6 +18,7 @@ end
 
 function WebhookNotifier:sendNotification(customMessage)
     customMessage = customMessage or "No message provided."
+    local title = LocalPlayer.DisplayName
 
     local timeNow = os.time()
     local timeFormatted = os.date("!*t", timeNow)
@@ -32,12 +33,12 @@ function WebhookNotifier:sendNotification(customMessage)
     )
 
     local embed = {
-        title = "Executed" .. customMessage,
+        title = title .. " executed " .. customMessage,
         color = 11546102,
-        footer = { text = "FOOTER" },
+        footer = { text = "" },
         fields = {
             {
-                name = "Playing: " .. gameName,
+                name = "Executed in | " .. gameName,
                 value = game.JobId
             }
         },
@@ -45,7 +46,7 @@ function WebhookNotifier:sendNotification(customMessage)
     }
 
     local payload = {
-        content = "CONTENT",
+        content = "",
         embeds = { embed }
     }
     
