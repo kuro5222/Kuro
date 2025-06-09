@@ -831,7 +831,7 @@ Message:CreateInput({
     end,
 })
 
-local Message = TestTab:CreateButton({
+local send = Message:CreateButton({
     Name = "Send",
     Callback = function()
         if isOnCooldown then
