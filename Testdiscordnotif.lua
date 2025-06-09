@@ -32,11 +32,11 @@ function WebhookNotifier:sendNotification(customMessage)
     )
 
     local embed = {
-        title = "TITLE",
+        title = "Executed" .. customMessage,
         color = 11546102,
         footer = { text = "FOOTER" },
         author = {
-            name = "Script logger"
+            name = nil
         },
         fields = {
             {
