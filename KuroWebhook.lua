@@ -9,49 +9,46 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local productInfo = MarketplaceService:GetProductInfo(game.PlaceId)
 local gameName = productInfo.Name
 
-local webhookUrl = "https://discord.com/api/webhooks/1381312522858270720/BwYnfcLuMi0rsW5xrgHbEzAZ0oEcyMUZ7YWKdGk5j_prrK5Foxz2TTQrxQeAnkeku9oZ"
+local webhookUrl = "https://discord.com/api/webhooks/1381314605212762213/f8xgBzMo97LhGTbOq0TQVrMRQIyLf1mFbzPbgLQLuEDA_HLbAbrtoYh36ykFD4d8PP_h"
 
 function KuroNotif.new()
     local self = setmetatable({}, KuroNotif)
     return self
 end
 
-function KuroNotif:SendNotif(customMessage)
-    customMessage = customMessage or "Missing code"
+function KuroNotif:sendNotification(customMessage)
+    customMessage = customMessage or "No message provided"
     local title = LocalPlayer.DisplayName
 
-local function getCustomTimestamp()
-    local timeNow = os.time()
-    local weekday = os.date("%a", timeNow)
-    local month = os.date("%B", timeNow)
-    local day = tonumber(os.date("%d", timeNow))
-    
-    local hour24 = tonumber(os.date("%H", timeNow))
-    local hour12 = hour24 % 12
-    local minute = os.date("%M", timeNow)
-    local second = os.date("%S", timeNow)
-    local ampm = (hour24 < 12) and "AM" or "PM"
-    
-    local timeString = string.format("%d:%s:%s %s", hour12, minute, second, ampm)
-    return string.format("Time of execute | %s %s %d %s", weekday, month, day, timeString)
-end
+    local function getCustomTimestamp()
+        local timeNow = os.time()
+        local weekday = os.date("%a", timeNow)       -- e.g., "Mon"
+        local month = os.date("%B", timeNow)          -- e.g., "June"
+        local day = tonumber(os.date("%d", timeNow))  -- e.g., 9 without leading zero
+        
+        local hour24 = tonumber(os.date("%H", timeNow))
+        local hour12 = hour24 % 12                   -- converts 24-hour to 12-hour format
+        local minute = os.date("%M", timeNow)
+        local second = os.date("%S", timeNow)
+        local ampm = (hour24 < 12) and "AM" or "PM"
+        
+        local timeString = string.format("%d:%s:%s %s", hour12, minute, second, ampm)
+        return string.format("Time of execute | %s %s %d %s", weekday, month, day, timeString)
+    end
 
-local customTimestamp = getCustomTimestamp()
+    local customTimestamp = getCustomTimestamp()
 
     local embed = {
         title = title .. " executes | " .. customMessage,
         color = 11546102,
-        footer = { text = customTimestamp },
-        author = {
-            name = "Script Notifier"
-        },
+        footer = { text = "" },
         fields = {
             {
                 name = "Executed in | " .. gameName,
-            },
-            {   name = "Game/Job Id | " .. tostring(game.PlaceId)
+                value = "GameId | " .. tostring(game.JobId)
             }
         },
+        timestamp = customTimestamp  -- Use the custom timestamp here
     }
 
     local payload = {
@@ -59,7 +56,7 @@ local customTimestamp = getCustomTimestamp()
         embeds = { embed }
     }
     
-    local requestFunc = syn and syn.request or http_request
+    local requestFunc = (syn and syn.request) or http_request
     requestFunc {
         Url = webhookUrl,
         Method = "POST",
