@@ -607,11 +607,11 @@ UtilityTab:CreateButton({
     end,
 })
 
---[[if game.PlaceId = GrowGame then
+if game.PlaceId == GrowGame then
     local GrowTab = Window:CreateTab("Grow a Garden (W.I.P)", nil)
     
     
-end]]
+end
 
 local Scripts = Window:CreateTab("Scripts", nil)
 
