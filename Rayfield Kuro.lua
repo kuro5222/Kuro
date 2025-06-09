@@ -9,6 +9,7 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+local KuroNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroWebhook.lua"))()
 
 -- Variables
 local GrowGame = 126884695634066
@@ -19,6 +20,7 @@ local noclipConnection
 local lastPos = nil
 local instantInteractEnabled = false
 local disablePromptConnection
+local Notif = KuroNotif.new()
 
 -- Auto execute
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -281,6 +283,7 @@ end)
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
+        Notif:SendNotif("Fly Gui")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
     end,
 })
@@ -288,6 +291,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Jork",
     Callback = function()
+        Notif:SendNotif("Jork")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
     end,
 })
@@ -295,8 +299,10 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
+        Notif:SendNotif("Reset")
         local function CallDie(D)
             if D == "Yes" then
+                Notif:SendNotif("Picked Yes on Reset")
                 local character = LocalPlayer.Character
                 local humanoid = character and character:FindFirstChildOfClass("Humanoid")
                 if humanoid then
@@ -324,6 +330,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Cam Noclip",
     Callback = function()
+        Notif:SendNotif("Cam Noclip")
         Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
     end,
 })
@@ -331,12 +338,14 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Cam Clip",
     Callback = function()
+        Notif:SendNotif("Cam Clip")
         Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
     end,
 })
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
+        Notif:SendNotif("First Person")
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
     end,
 })
@@ -344,6 +353,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Normal Zoom",
     Callback = function()
+        Notif:SendNotif("Normal Zoom")
         LocalPlayer.CameraMaxZoomDistance = 128
         LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end,
@@ -352,6 +362,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Inf Zoom",
     Callback = function()
+        Notif:SendNotif("Inf Zoom")
         LocalPlayer.CameraMaxZoomDistance = math.huge
         LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end,
@@ -438,6 +449,7 @@ UtilityTab:CreateInput({
 UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function()
+        Notif:SendNotif("Esp On")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
     end,
 })
@@ -445,6 +457,7 @@ UtilityTab:CreateButton({
 UtilityTab:CreateButton({
     Name = "Esp off",
     Callback = function()
+        Notif:SendNotif("Esp Off")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
     end,
 })
@@ -517,7 +530,7 @@ UtilityTab:CreateSlider({
     end,
 })
 
-UtilityTab:CreateButton({
+--[[UtilityTab:CreateButton({
     Name = "Rejoin",
     Callback = function()
         local function Rj(R)
@@ -583,11 +596,12 @@ TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
             Callback = SHop,
         })
     end,
-})
+})]]
 
 UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
+        Notif:SendNotif("Leave")
         local function Shut(L)
             if L == "Yes" then
                 task.wait(1.5)
@@ -616,6 +630,7 @@ if game.PlaceId == GrowGame then
     GrowTab:CreateButton({
         Name = "Gear Ui",
         Callback = function()
+            Notif:SendNotif("Gear Ui")
             _G.toggleGear = _G.toggleGear or false
 
             local shop = playerGui.Gear_Shop
@@ -635,6 +650,7 @@ if game.PlaceId == GrowGame then
     GrowTab:CreateButton({
         Name = "Seed Ui",
         Callback = function()
+            Notif:SendNotif("Seed Ui")
             _G.toggleSeed = _G.toggleSeed or false
 
             local shop = playerGui.Seed_Shop
@@ -654,6 +670,7 @@ if game.PlaceId == GrowGame then
     GrowTab:CreateButton({
         Name = "Cosmetic Ui",
         Callback = function()
+            Notif:SendNotif("Cosmetic Ui")
             _G.toggleCosmetic = _G.toggleCosmetic or false
 
             local shop = playerGui.CosmeticShop_UI
@@ -676,6 +693,7 @@ local Scripts = Window:CreateTab("Scripts", nil)
 Scripts:CreateButton({
     Name = "Nameless Admin",
     Callback = function()
+        Notif:SendNotif("Nameless Admin")
         local function CallNa(NA)
             if NA == "Yes" then
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
@@ -700,6 +718,7 @@ Scripts:CreateButton({
 Scripts:CreateButton({
     Name = "Native",
     Callback = function()
+        Notif:SendNotif("Native loader")
         local function CallNate(Nate)
             if Nate == "Yes" then
                 (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()  
@@ -724,6 +743,7 @@ Scripts:CreateButton({
 Scripts:CreateButton({
     Name = "No-lag",
     Callback = function()
+        Notif:SendNotif("No-Lag")
         local function CallLag(Lag)
             if Lag == "Yes" then
                 loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()  
@@ -748,6 +768,7 @@ Scripts:CreateButton({
 Scripts:CreateButton({
     Name = "SpeedX",
     Callback = function()
+        Notif:SendNotif("SpeedX hub")
         local function CallSpeed(Speed)
             if Speed == "Yes" then
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
@@ -775,6 +796,7 @@ local GuiTab = Window:CreateTab("Gui", nil)
 GuiTab:CreateButton({
     Name = "⌨️keyboard",
     Callback = function()
+        Notif:SendNotif("keyboard")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end,
 })
@@ -782,6 +804,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "📒Notepad",
     Callback = function()
+        Notif:SendNotif("Notepad")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
     end,
 })
@@ -789,6 +812,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "Universal Viewer",
     Callback = function()
+        Notif:SendNotif("Universal Viewer")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
     end,
 })
@@ -796,6 +820,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
+        Notif:SendNotif("Simple Spy")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
     end,
 })
@@ -803,6 +828,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
+        Notif:SendNotif("Dex v3")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
     end,
 })
@@ -810,6 +836,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
+        Notif:SendNotif("ShiftLock")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
     end,
 })
@@ -824,7 +851,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "⚠️SICRET SCREPT⚠️",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DiscordNotif.lua"))()
+        Notif:SendNotif("⚠️SICRET⚠️")
         local function Lol(Secret)
             if Secret == "YUH UH" then
                 for i = 5, 1, -1 do
@@ -929,9 +956,9 @@ local send = Message:CreateButton({
             timestamp = timestamp
         }
 
-        local webhookUrl = "https://discord.com/api/webhooks/1381314605212762213/f8xgBzMo97LhGTbOq0TQVrMRQIyLf1mFbzPbgLQLuEDA_HLbAbrtoYh36ykFD4d8PP_h"
+        local webhookUrl = "https://discord.com/api/webhooks/1381312522858270720/BwYnfcLuMi0rsW5xrgHbEzAZ0oEcyMUZ7YWKdGk5j_prrK5Foxz2TTQrxQeAnkeku9oZ"
 
-        local requestFunc = syn and syn.request or http_request
+        local requestFunc = http_request
         requestFunc {
             Url = webhookUrl,
             Method = "POST",
