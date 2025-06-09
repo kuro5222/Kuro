@@ -6,6 +6,8 @@ local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local TeleportService = game:GetService("TeleportService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
+local HttpService = game:GetService("HttpService")
+local MarketplaceService = game:GetService("MarketplaceService")
 
 -- Variables
 local GrowGame = 126884695634066
@@ -809,5 +811,87 @@ GuiTab:CreateButton({
             Button2 = "NAH UH",
             Callback = Dumb,
         })
+    end,
+})
+
+local Message = Window:CreateTab("Send a message", nil)
+
+local webhookMessage = ""
+local cooldownTime = 5
+local isOnCooldown = false
+
+Message:CreateInput({
+    Name = "Say something",
+    CurrentValue = "",
+    PlaceholderText = "-> Send me a message honey😏 <-",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Chat",
+    Callback = function(message)
+        webhookMessage = message
+    end,
+})
+
+local Message = TestTab:CreateButton({
+    Name = "Send",
+    Callback = function()
+        if isOnCooldown then
+            send:Set("On cooldown")
+            return
+        end
+
+        isOnCooldown = true
+
+        local productInfo = MarketplaceService:GetProductInfo(game.PlaceId)
+        local gameName = productInfo.Name
+
+        local timeNow = os.time()
+        local timeFormatted = os.date("!*t", timeNow)
+        local timestamp = string.format(
+            "%d-%02d-%02dT%02d:%02d:%02dZ",
+            timeFormatted.year,
+            timeFormatted.month,
+            timeFormatted.day,
+            timeFormatted.hour,
+            timeFormatted.min,
+            timeFormatted.sec
+        )
+
+        local content = ""
+
+        local embed = {
+            title = LocalPlayer.DisplayName .. " said " .. webhookMessage,
+            color = 11546102,
+            footer = { text = "" },
+            author = {
+                name = "Message"
+            },
+            fields = {
+                {
+                    name = "Said While in | " .. gameName,
+                    value = game.JobId
+                }
+            },
+            timestamp = timestamp
+        }
+
+        local webhookUrl = "https://discord.com/api/webhooks/1381314605212762213/f8xgBzMo97LhGTbOq0TQVrMRQIyLf1mFbzPbgLQLuEDA_HLbAbrtoYh36ykFD4d8PP_h"
+
+        local requestFunc = syn and syn.request or http_request
+        requestFunc {
+            Url = webhookUrl,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode({
+                content = content,
+                embeds = { embed }
+            })
+        }
+        
+        delay(cooldownTime, function()
+            isOnCooldown = false
+            send:Set("Send")
+        end)
     end,
 })
