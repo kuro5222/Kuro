@@ -59,7 +59,7 @@ local customTimestamp = getCustomTimestamp()
         embeds = { embed }
     }
     
-    local requestFunc = http_request
+    local requestFunc = syn and syn.request or http_request
     requestFunc {
         Url = webhookUrl,
         Method = "POST",
