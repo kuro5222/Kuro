@@ -49,7 +49,8 @@ local customTimestamp = getCustomTimestamp()
             {
                 name = "Executed in | " .. gameName,
             },
-            {   name = "Game/Job Id | " .. tostring(gameId)
+            {   name = "Game/Job Id | " .. tostring(game.PlaceId)
+            }
         },
     }
 
