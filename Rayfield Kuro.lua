@@ -8,6 +8,7 @@ local TeleportService = game:GetService("TeleportService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
+local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
 
 -- Variables
 local GrowGame = 126884695634066
@@ -612,7 +613,62 @@ UtilityTab:CreateButton({
 if game.PlaceId == GrowGame then
     local GrowTab = Window:CreateTab("Grow a Garden (W.I.P)", nil)
     
-    
+    GrowTab:CreateButton({
+        Name = "Gear Ui",
+        Callback = function()
+            _G.toggleGear = _G.toggleGear or false
+
+            local shop = playerGui.Gear_Shop
+
+            if _G.toggleGear then
+                shop.Enabled = false
+                shop.IgnoreGuiInset = false
+                _G.toggleGear = false
+            else
+                shop.Enabled = true
+                shop.IgnoreGuiInset = true
+                _G.toggleGear = true
+            end
+        end,
+    })
+
+    GrowTab:CreateButton({
+        Name = "Seed Ui",
+        Callback = function()
+            _G.toggleSeed = _G.toggleSeed or false
+
+            local shop = playerGui.Seed_Shop
+
+            if _G.toggleSeed then
+                shop.Enabled = false
+                shop.IgnoreGuiInset = false
+                _G.toggleSeed = false
+            else
+                shop.Enabled = true
+                shop.IgnoreGuiInset = true
+                _G.toggleSeed = true
+            end
+        end,
+    })
+
+    GrowTab:CreateButton({
+        Name = "Cosmetic Ui",
+        Callback = function()
+            _G.toggleCosmetic = _G.toggleCosmetic or false
+
+            local shop = playerGui.CosmeticShop_UI
+
+            if _G.toggleCosmetic then
+                shop.Enabled = false
+                shop.IgnoreGuiInset = false
+                _G.toggleCosmetic = false
+            else
+                shop.Enabled = true
+                shop.IgnoreGuiInset = true
+                _G.toggleCosmetic = true
+            end
+        end,
+    })
 end
 
 local Scripts = Window:CreateTab("Scripts", nil)
@@ -835,7 +891,6 @@ local send = Message:CreateButton({
     Name = "Send",
     Callback = function()
         if isOnCooldown then
-            send:Set("On cooldown")
             return
         end
 
@@ -891,7 +946,6 @@ local send = Message:CreateButton({
         
         delay(cooldownTime, function()
             isOnCooldown = false
-            send:Set("Send")
         end)
     end,
 })
