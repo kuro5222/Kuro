@@ -16,7 +16,7 @@ function KuroNotif.new()
     return self
 end
 
-function KuroNotif:sendNotification(customMessage)
+function KuroNotif:SendNotif(customMessage)
     customMessage = customMessage or "Missing code"
     local title = LocalPlayer.DisplayName
 
