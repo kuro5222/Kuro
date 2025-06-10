@@ -42,17 +42,17 @@ function KuroNotif:sendnotif(customMessage)
     local Time = getCustomTimestamp()
 
     local embed = {
-        title = "# " .. title .. " used | " .. customMessage,
+        title = "**" .. title .. " used | " .. customMessage .. "**",
         color = 11546102,
         footer = { text = "Time execution | " .. Time },
         fields = {
             {
-                name = "While in | " .. gameName,
+                name = "**While in | " .. gameName .. "**",
                 value = ""
             },
             {
-                name = "Job Id",
-                value = tostring(game.PlaceId)
+                name = "**Job Id**",
+                value = "**" .. tostring(game.PlaceId) .. "**"
             }
         }
     }
