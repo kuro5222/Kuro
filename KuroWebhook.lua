@@ -16,53 +16,57 @@ function KuroNotif.new()
     return self
 end
 
-function KuroNotif:sendNotification(customMessage)
-    customMessage = customMessage or "No message provided"
+function KuroNotif:sendnotif(customMessage)
+    customMessage = customMessage or "Missing Message"
     local title = LocalPlayer.DisplayName
 
     local function getCustomTimestamp()
         local timeNow = os.time()
-        local weekday = os.date("%a", timeNow)       -- e.g., "Mon"
-        local month = os.date("%B", timeNow)          -- e.g., "June"
-        local day = tonumber(os.date("%d", timeNow))  -- e.g., 9 without leading zero
+        local weekday = os.date("%a", timeNow)
+        local month = os.date("%B", timeNow)
+        local day = tonumber(os.date("%d", timeNow))
         
         local hour24 = tonumber(os.date("%H", timeNow))
-        local hour12 = hour24 % 12                   -- converts 24-hour to 12-hour format
+        local hour12 = hour24 % 12
+        if hour12 == 0 then
+            hour12 = 12
+        end
         local minute = os.date("%M", timeNow)
         local second = os.date("%S", timeNow)
         local ampm = (hour24 < 12) and "AM" or "PM"
         
         local timeString = string.format("%d:%s:%s %s", hour12, minute, second, ampm)
-        return string.format("Time of execute | %s %s %d %s", weekday, month, day, timeString)
+        return string.format("%s | %s %d, | Time | %s", weekday, month, day, timeString)
     end
 
-    local customTimestamp = getCustomTimestamp()
+    local Time = getCustomTimestamp()
 
     local embed = {
-        title = title .. " executes | " .. customMessage,
+        title = "# " .. title .. " used | " .. customMessage,
         color = 11546102,
-        footer = { text = "" },
+        footer = { text = "Time execution | " .. Time },
         fields = {
             {
-                name = "Executed in | " .. gameName,
-                value = "GameId | " .. tostring(game.JobId)
+                name = "While in | " .. gameName,
+                value = ""
+            },
+            {
+                name = "Job Id",
+                value = tostring(game.PlaceId)
             }
-        },
-        timestamp = customTimestamp  -- Use the custom timestamp here
+        }
     }
 
-    local payload = {
-        content = "",
-        embeds = { embed }
-    }
+    local data = { content = "", embeds = { embed } }
+    local jsonData = HttpService:JSONEncode(data)
     
-    local requestFunc = (syn and syn.request) or http_request
-    requestFunc {
+    local requestFunc = http_request
+    requestFunc({
         Url = webhookUrl,
         Method = "POST",
         Headers = { ["Content-Type"] = "application/json" },
-        Body = HttpService:JSONEncode(payload)
-    }
+        Body = jsonData
+    })
 end
 
 return KuroNotif
