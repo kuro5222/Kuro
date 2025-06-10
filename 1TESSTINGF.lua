@@ -14,7 +14,7 @@ function KuroNotif.new()
 end
 
 -- Renamed the method to SendNotif
-function KuroNotif:SendNotif(customMessage)
+function KuroNotif:sSendNotif(customMessage)
     customMessage = customMessage or "No message provided."
     local title = (LocalPlayer and LocalPlayer.DisplayName) or "Unknown Player"
     local productInfo = MarketplaceService:GetProductInfo(game.PlaceId)
