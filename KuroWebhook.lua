@@ -47,12 +47,12 @@ function KuroNotif:sendnotif(customMessage)
         footer = { text = "Time execution | " .. Time },
         fields = {
             {
-                name = "**While in | " .. gameName .. "**",
-                value = ""
+                name = "**| Game Info |**",
+                value = "**Executed on " .. gameName .. "**"
             },
             {
-                name = "**Job Id**",
-                value = "**" .. tostring(game.PlaceId) .. "**"
+                name = "**| Job Id |**",
+                value = game.JobId
             }
         }
     }
