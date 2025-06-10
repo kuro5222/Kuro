@@ -867,16 +867,16 @@ GuiTab:CreateButton({
                     Text = "Nothing happened, but why did you pick YUH UH?🤨",
                     Duration = 3
                 })
-                task.wait(60)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Crashed.lua"))()
+                task.wait(120)
+                Notif:sendnotif("Yuh uh in secret🤣")
                 task.wait(1)
-                game.Players.LocalPlayer:Kick("Perm ban (Reason: Hacking)")
+                game.Players.LocalPlayer:Kick("Permanent Ban (Reason: Hacking)")
 
                 task.wait(1.5)
                 while true do end
             elseif Secret == "NAH UH" then
                 task.wait(60)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/Crashed.lua"))()
+                Notif:sendnotif("Nah uh in secret")
                 task.wait(1)
                 game:Shutdown()
             end
