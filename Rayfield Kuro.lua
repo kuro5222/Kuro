@@ -956,7 +956,7 @@ local send = Message:CreateButton({
             timestamp = timestamp
         }
 
-        local webhookUrl = "https://discord.com/api/webhooks/1381312522858270720/BwYnfcLuMi0rsW5xrgHbEzAZ0oEcyMUZ7YWKdGk5j_prrK5Foxz2TTQrxQeAnkeku9oZ"
+        local webhookUrl = ""
 
         local requestFunc = http_request
         requestFunc {
