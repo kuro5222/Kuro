@@ -1,0 +1,71 @@
+--;tp ULOL
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+localPlayer.Chatted:Connect(function(msg)
+    -- Check for any case variation of ";tp " (case-insensitive)
+    if string.sub(string.lower(msg), 1, 4) == ";tp " then
+        -- Extract and trim the target input
+        local targetInput = string.match(string.sub(msg, 5), "^%s*(.-)%s*$")
+        if targetInput == "" then
+            warn("No target name provided!")
+            return
+        end
+
+        -- Find a matching player based on username or display name, case-insensitive
+        local targetPlayer = nil
+        for _, player in ipairs(Players:GetPlayers()) do
+            local foundInUsername = string.find(string.lower(player.Name), string.lower(targetInput), 1, true)
+            local foundInDisplayName = player.DisplayName and string.find(string.lower(player.DisplayName), string.lower(targetInput), 1, true)
+            if foundInUsername or foundInDisplayName then
+                targetPlayer = player
+                break
+            end
+        end
+
+        if not targetPlayer then
+            game.StarterGui:SetCore("SendNotification", {
+    Title = "Player " .. targetInput;
+    Text = "Not found";
+    Duration = 5;
+    callback = NotificationBindable;
+    })
+            return
+        end
+
+        -- Wait for the target player's character and its HumanoidRootPart, up to 5 seconds.
+        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+        local targetHRP = targetCharacter:WaitForChild("HumanoidRootPart", 5)
+        if not targetHRP then
+            game.StarterGui:SetCore("SendNotification", {
+    Title = "Player " .. targetInput;
+    Text = "Humanoid not found.";
+    Duration = 3.5;
+    callback = NotificationBindable;
+    })
+            return
+        end
+
+        -- Wait for the local player's character and its HumanoidRootPart, up to 5 seconds.
+        local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local hrp = character:WaitForChild("HumanoidRootPart", 5)
+        if not hrp then
+            game.StarterGui:SetCore("SendNotification", {
+    Title = "Player " .. targetInput;
+    Text = "TEKA";
+    Duration = 3.5;
+    callback = NotificationBindable;
+    })
+            return
+        end
+
+        -- Teleport your character near the target with a slight upward offset
+        hrp.CFrame = targetHRP.CFrame + Vector3.new(0, 5, 0)
+        game.StarterGui:SetCore("SendNotification", {
+    Title = "Player " .. targetInput;
+    Text = "Successful";
+    Duration = 5;
+    callback = NotificationBindable;
+    })
+    end
+end)
