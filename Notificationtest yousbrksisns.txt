@@ -33,7 +33,7 @@ function Notification:Notify(data, config, extra)
     notificationBackdrop.AnchorPoint = Vector2.new(0.5, 0.5)
     notificationBackdrop.BackgroundTransparency = 1
     notificationBackdrop.BorderSizePixel = 0
-    notificationBackdrop.Position = UDim2.new(5, 0, 5, 0)
+    notificationBackdrop.Position = UDim2.new(0.5, 0, 0.5, 0)
     notificationBackdrop.Size = UDim2.new(0, 0, 0, 0)
     notificationBackdrop.Image = "rbxassetid://1316045217"
     notificationBackdrop.ImageColor3 = Color3.fromRGB(0, 0, 0)
