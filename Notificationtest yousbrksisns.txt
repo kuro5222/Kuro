@@ -1,0 +1,179 @@
+-- Ensure the notification GUI exists
+local GUI = game:GetService("CoreGui"):FindFirstChild("STX_Nofitication")
+if not GUI then
+    local STX_Nofitication = Instance.new("ScreenGui")
+    local STX_NofiticationUIListLayout = Instance.new("UIListLayout")
+    STX_Nofitication.Name = "STX_Nofitication"
+    STX_Nofitication.Parent = game.CoreGui
+    STX_Nofitication.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    STX_Nofitication.ResetOnSpawn = false
+
+    STX_NofiticationUIListLayout.Name = "STX_NofiticationUIListLayout"
+    STX_NofiticationUIListLayout.Parent = STX_Nofitication
+    STX_NofiticationUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+    STX_NofiticationUIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    STX_NofiticationUIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+
+    GUI = STX_Nofitication  -- assign the new GUI to our variable
+end
+
+-- Notification module
+local Notification = {}
+
+function Notification:Notify(data, config, extra)
+    -- data: { Title = "Notification Title", Description = "Notification description" }
+    -- config: { Type = "default", OutlineColor = Color3.new(), Time = 2 }
+    -- extra: for additional settings like { Image = "rbxassetid://1234567890", ImageColor = Color3.new(), Callback = function(state) ... end }
+
+    local selectedType = string.lower(tostring(config.Type))
+    
+    local notificationBackdrop = Instance.new("ImageLabel")
+    notificationBackdrop.Name = "notificationBackdrop"
+    notificationBackdrop.Parent = GUI
+    notificationBackdrop.AnchorPoint = Vector2.new(0.5, 0.5)
+    notificationBackdrop.BackgroundTransparency = 1
+    notificationBackdrop.BorderSizePixel = 0
+    notificationBackdrop.Position = UDim2.new(0.91526, 0, 0.93681, 0)
+    notificationBackdrop.Size = UDim2.new(0, 0, 0, 0)
+    notificationBackdrop.Image = "rbxassetid://1316045217"
+    notificationBackdrop.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    notificationBackdrop.ImageTransparency = 0.4
+    notificationBackdrop.ScaleType = Enum.ScaleType.Slice
+    notificationBackdrop.SliceCenter = Rect.new(10, 10, 118, 118)
+    
+    local windowFrame = Instance.new("Frame")
+    windowFrame.Name = "Window"
+    windowFrame.Parent = notificationBackdrop
+    windowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    windowFrame.BorderSizePixel = 0
+    windowFrame.Position = UDim2.new(0, 5, 0, 5)
+    windowFrame.Size = UDim2.new(0, 230, 0, 80)
+    windowFrame.ZIndex = 2
+    
+    local outlineFrame = Instance.new("Frame")
+    outlineFrame.Name = "Outline_A"
+    outlineFrame.Parent = windowFrame
+    outlineFrame.BackgroundColor3 = config.OutlineColor or Color3.fromRGB(255, 255, 255)
+    outlineFrame.BorderSizePixel = 0
+    outlineFrame.Position = UDim2.new(0, 0, 0, 25)
+    outlineFrame.Size = UDim2.new(0, 230, 0, 2)
+    outlineFrame.ZIndex = 5
+    
+    local windowTitle = Instance.new("TextLabel")
+    windowTitle.Name = "WindowTitle"
+    windowTitle.Parent = windowFrame
+    windowTitle.BackgroundTransparency = 1
+    windowTitle.Position = UDim2.new(0, 8, 0, 2)
+    windowTitle.Size = UDim2.new(0, 222, 0, 22)
+    windowTitle.ZIndex = 4
+    windowTitle.Font = Enum.Font.GothamSemibold
+    windowTitle.Text = data.Title
+    windowTitle.TextColor3 = Color3.fromRGB(220, 220, 220)
+    windowTitle.TextSize = 12
+    windowTitle.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local windowDescription = Instance.new("TextLabel")
+    windowDescription.Name = "WindowDescription"
+    windowDescription.Parent = windowFrame
+    windowDescription.BackgroundTransparency = 1
+    windowDescription.Position = UDim2.new(0, 8, 0, 34)
+    windowDescription.Size = UDim2.new(0, 216, 0, 40)
+    windowDescription.ZIndex = 4
+    windowDescription.Font = Enum.Font.GothamSemibold
+    windowDescription.Text = data.Description
+    windowDescription.TextColor3 = Color3.fromRGB(180, 180, 180)
+    windowDescription.TextSize = 12
+    windowDescription.TextWrapped = true
+    windowDescription.TextXAlignment = Enum.TextXAlignment.Left
+    windowDescription.TextYAlignment = Enum.TextYAlignment.Top
+
+    if selectedType == "default" then
+        coroutine.wrap(function()
+            notificationBackdrop:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
+            windowFrame.Size = UDim2.new(0, 230, 0, 80)
+            outlineFrame:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", config.Time)
+            wait(config.Time)
+            notificationBackdrop:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            wait(0.2)
+            notificationBackdrop:Destroy()
+        end)()
+    elseif selectedType == "image" then
+        notificationBackdrop:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
+        windowFrame.Size = UDim2.new(0, 230, 0, 80)
+        windowTitle.Position = UDim2.new(0, 24, 0, 2)
+        
+        local imageButton = Instance.new("ImageButton")
+        imageButton.Parent = windowFrame
+        imageButton.BackgroundTransparency = 1
+        imageButton.BorderSizePixel = 0
+        imageButton.Position = UDim2.new(0, 4, 0, 4)
+        imageButton.Size = UDim2.new(0, 18, 0, 18)
+        imageButton.ZIndex = 5
+        imageButton.AutoButtonColor = false
+        imageButton.Image = extra.Image
+        imageButton.ImageColor3 = extra.ImageColor
+
+        coroutine.wrap(function()
+            outlineFrame:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", config.Time)
+            wait(config.Time)
+            notificationBackdrop:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            wait(0.2)
+            notificationBackdrop:Destroy()
+        end)()
+    elseif selectedType == "option" then
+        notificationBackdrop:TweenSize(UDim2.new(0, 240, 0, 110), "Out", "Linear", 0.2)
+        windowFrame.Size = UDim2.new(0, 230, 0, 100)
+        
+        local uncheckButton = Instance.new("ImageButton")
+        uncheckButton.Name = "Uncheck"
+        uncheckButton.Parent = windowFrame
+        uncheckButton.BackgroundTransparency = 1
+        uncheckButton.Position = UDim2.new(0, 7, 0, 76)
+        uncheckButton.Size = UDim2.new(0, 18, 0, 18)
+        uncheckButton.ZIndex = 5
+        uncheckButton.AutoButtonColor = false
+        uncheckButton.Image = "http://www.roblox.com/asset/?id=6031094678"
+        uncheckButton.ImageColor3 = Color3.fromRGB(255, 84, 84)
+        
+        local checkButton = Instance.new("ImageButton")
+        checkButton.Name = "Check"
+        checkButton.Parent = windowFrame
+        checkButton.BackgroundTransparency = 1
+        checkButton.Position = UDim2.new(0, 28, 0, 76)
+        checkButton.Size = UDim2.new(0, 18, 0, 18)
+        checkButton.ZIndex = 5
+        checkButton.AutoButtonColor = false
+        checkButton.Image = "http://www.roblox.com/asset/?id=6031094667"
+        checkButton.ImageColor3 = Color3.fromRGB(83, 230, 50)
+        
+        coroutine.wrap(function()
+            local stillPresent = true
+            local function onUncheck()
+                pcall(function() extra.Callback(false) end)
+                notificationBackdrop:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                wait(0.2)
+                notificationBackdrop:Destroy()
+                stillPresent = false
+            end
+            local function onCheck()
+                pcall(function() extra.Callback(true) end)
+                notificationBackdrop:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                wait(0.2)
+                notificationBackdrop:Destroy()
+                stillPresent = false
+            end
+            uncheckButton.MouseButton1Click:Connect(onUncheck)
+            checkButton.MouseButton1Click:Connect(onCheck)
+            
+            outlineFrame:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", config.Time)
+            wait(config.Time)
+            if stillPresent then
+                notificationBackdrop:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+                wait(0.2)
+                notificationBackdrop:Destroy()
+            end
+        end)()
+    end
+end
+
+return Notification
