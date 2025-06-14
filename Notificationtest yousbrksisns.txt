@@ -1,4 +1,4 @@
---[[Ensure the notification GUI exists
+Ensure the notification GUI exists
 local GUI = game:GetService("CoreGui"):FindFirstChild("STX_Nofitication")
 if not GUI then
     local STX_Nofitication = Instance.new("ScreenGui")
@@ -15,7 +15,7 @@ if not GUI then
     STX_NofiticationUIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 
     GUI = STX_Nofitication  -- assign the new GUI to our variable
-end]]
+end
 
 -- Notification module
 local Notification = {}
