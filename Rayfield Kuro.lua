@@ -31,7 +31,7 @@ local messages = {
     "Made By Kiro",
     "Youtube: 676767",
     "Tiktok: kxnhshs",
-    "Github: kiroGit"
+    "Github: kiro-git"
 }
 
 local RM = messages[math.random(#messages)]
