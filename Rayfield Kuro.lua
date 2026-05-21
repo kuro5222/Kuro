@@ -28,11 +28,10 @@ playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
 --Random Messages 😏
 local messages = {
-    "Smile Nika📸📸",
-    "Daisuki 🤭",
-    "Kenneth message me, im so friken lonele😭",
-    "Yoo Kenny is that you Kenny?",
-    "Yoo, using me again!?? BAKA!😤"
+    "Made By Kiro",
+    "Youtube: 676767",
+    "Tiktok: kxnhshs",
+    "Github: kiroGit"
 }
 
 local RM = messages[math.random(#messages)]
