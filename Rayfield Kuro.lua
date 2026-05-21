@@ -1,4 +1,7 @@
 -- Services
+
+TEST42344
+
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroLoginHook.lua"))()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
