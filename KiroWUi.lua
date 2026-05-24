@@ -46,6 +46,11 @@ local PlayerSection = Window:Section({
     Opened = false,
 })
 
+local OtherInfo = Window:Section({
+    Title = "More Info",
+    Icon = "info",
+})
+
 local JID = nil
 
 StatusSection:Input({
@@ -504,4 +509,9 @@ UtilityTab:Button({
             }
         })
     end,
+})
+
+OtherInfo:Tab({
+  Title = "Youtube",
+  Icon = "Play",
 })
