@@ -8,7 +8,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
 
-local player = Players.LocalPlayer
 local LocalPlayer = Players.LocalPlayer
 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local playerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -55,7 +54,7 @@ StatusSection:Input({
     Desc = nil,
     Value = nil,
     InputIcon = "bird",
-    Type = "Input", -- or "Textarea"
+    Type = "Input",
     Placeholder = "Input Jobid...",
     Callback = function(JobId)
         JID = JobId
@@ -158,9 +157,9 @@ local WalkS = PlayerTab:Slider({
         Default = 16,
     },
     Callback = function(value)
-        local character = LocalPlayer.Character
-        if character then
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local char = LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
             if humanoid then
                 humanoid.WalkSpeed = value
             end
@@ -177,9 +176,9 @@ local JumpP = PlayerTab:Slider({
         Default = 50,
     },
     Callback = function(value)
-        local character = LocalPlayer.Character
-        if character then
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local char = LocalPlayer.Character
+        if char then
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
             if humanoid then
                 humanoid.JumpPower = value
             end
@@ -204,87 +203,11 @@ PlayerTab:Button({
 PlayerTab:Button({
     Title = "Reset",
     Callback = function()
-        local character = LocalPlayer.Character
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+        local char = LocalPlayer.Character
+        local humanoid = char and char:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid:ChangeState(Enum.HumanoidStateType.Dead)
         end
-    end,
-})
-
-local CamTab = UStuff:Tab({
-    Title = "Camera",
-    Opened = false,
-})
-
-CamTab:Toggle({
-    Title = "Cam Noclip",
-    Value = false,
-    Callback = function(state)
-        if state then
-            Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
-        else
-            Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
-        end
-    end,
-})
-
-CamTab:Button({
-    Title = "Cam NoClip",
-    Callback = function()
-        local player = Players.LocalPlayer
-        local camera = workspace.CurrentCamera
-
-        local SetConstant = (debug and debug.setconstant) or setconstant
-        local GetConstants = (debug and debug.getconstants) or getconstants
-        local HasAdvancedAccess = (getgc and SetConstant and GetConstants)
-
-        if HasAdvancedAccess then
-            local PlayerModule = player:FindFirstChild("PlayerScripts") and player.PlayerScripts:FindFirstChild("PlayerModule")
-            local Popper = PlayerModule 
-                and PlayerModule:FindFirstChild("CameraModule") 
-                and PlayerModule.CameraModule:FindFirstChild("ZoomController") 
-                and PlayerModule.CameraModule.ZoomController:FindFirstChild("Popper")
-
-            if Popper then
-                for i, v in pairs(getgc()) do
-                    if type(v) == "function" and getfenv(v).script == Popper then
-                        for i2, v2 in pairs(GetConstants(v)) do
-                            if tonumber(v2) == 0.25 then
-                                SetConstant(v, i2, 0)
-                            elseif tonumber(v2) == 0 then
-                                SetConstant(v, i2, 0.25)
-                            end
-                        end
-                    end
-                end
-            end
-        else
-            Players.LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
-        end
-    end,
-})
-
-CamTab:Button({
-    Title = "First Person🧑",
-    Callback = function()
-        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
-    end,
-})
-
-CamTab:Button({
-    Title = "Normal Zoom",
-    Callback = function()
-        LocalPlayer.CameraMaxZoomDistance = 128
-        LocalPlayer.CameraMode = Enum.CameraMode.Classic
-    end,
-})
-
-CamTab:Button({
-    Title = "Inf Zoom",
-    Callback = function()
-        LocalPlayer.CameraMaxZoomDistance = math.huge
-        LocalPlayer.CameraMode = Enum.CameraMode.Classic
     end,
 })
 
@@ -292,9 +215,9 @@ PlayerTab:Button({
     Title = "Outline Players",
     Callback = function()
         local function applyHighlight(player)
-            local function onCharacterAdded(character)
+            local function onCharacterAdded(char)
                 local highlight = Instance.new("Highlight")
-                highlight.Parent = character
+                highlight.Parent = char
                 highlight.Archivable = true
                 highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
                 highlight.Enabled = true
@@ -319,6 +242,80 @@ PlayerTab:Button({
     end,
 })
 
+local CamTab = UStuff:Tab({
+    Title = "Camera",
+    Opened = false,
+})
+
+CamTab:Toggle({
+    Title = "Cam Noclip",
+    Value = false,
+    Callback = function(state)
+        if state then
+            LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
+        else
+            LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
+        end
+    end,
+})
+
+CamTab:Button({
+    Title = "Cam NoClip",
+    Callback = function()
+        local camera = workspace.CurrentCamera
+        local SetConstant = (debug and debug.setconstant) or setconstant
+        local GetConstants = (debug and debug.getconstants) or getconstants
+        local HasAdvancedAccess = (getgc and SetConstant and GetConstants)
+
+        if HasAdvancedAccess then
+            local PlayerModule = LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("PlayerModule")
+            local Popper = PlayerModule 
+                and PlayerModule:FindFirstChild("CameraModule") 
+                and PlayerModule.CameraModule:FindFirstChild("ZoomController") 
+                and PlayerModule.CameraModule.ZoomController:FindFirstChild("Popper")
+
+            if Popper then
+                for i, v in pairs(getgc()) do
+                    if type(v) == "function" and getfenv(v).script == Popper then
+                        for i2, v2 in pairs(GetConstants(v)) do
+                            if tonumber(v2) == 0.25 then
+                                SetConstant(v, i2, 0)
+                            elseif tonumber(v2) == 0 then
+                                SetConstant(v, i2, 0.25)
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            LocalPlayer.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom
+        end
+    end,
+})
+
+CamTab:Button({
+    Title = "First Person 🧑",
+    Callback = function()
+        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
+    end,
+})
+
+CamTab:Button({
+    Title = "Normal Zoom",
+    Callback = function()
+        LocalPlayer.CameraMaxZoomDistance = 128
+        LocalPlayer.CameraMode = Enum.CameraMode.Classic
+    end,
+})
+
+CamTab:Button({
+    Title = "Inf Zoom",
+    Callback = function()
+        LocalPlayer.CameraMaxZoomDistance = math.huge
+        LocalPlayer.CameraMode = Enum.CameraMode.Classic
+    end,
+})
+
 local UtilityTab = UStuff:Tab({
     Title = "Utilities",
     Opened = false,
@@ -326,6 +323,10 @@ local UtilityTab = UStuff:Tab({
 
 local function getBp()
     return LocalPlayer:WaitForChild("Backpack")
+end
+
+local function getChar()
+    return LocalPlayer.Character
 end
 
 UtilityTab:Button({
@@ -342,10 +343,6 @@ UtilityTab:Button({
     end,
 })
 
-local function getChar()
-    return Players.LocalPlayer.Character
-end
-
 local isFrozen = false
 
 local function toggleFreeze(value)
@@ -360,6 +357,7 @@ local function toggleFreeze(value)
     end
 end
 
+-- Initialize freeze state
 local char = getChar()
 if char then
     for _, part in ipairs(char:GetChildren()) do
@@ -377,7 +375,7 @@ UtilityTab:Toggle({
     end,
 })
 
-Players.LocalPlayer.CharacterAdded:Connect(function(newChar)
+LocalPlayer.CharacterAdded:Connect(function(newChar)
     for _, part in ipairs(newChar:GetChildren()) do
         if part:IsA("BasePart") then
             part.Anchored = isFrozen
@@ -388,33 +386,33 @@ end)
 UtilityTab:Button({
     Title = "Sit",
     Callback = function()
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        humanoid.Sit = true
-    end
-end,
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.Sit = true
+        end
+    end,
 })
 
 UtilityTab:Button({
-    Title = "Lay?",
+    Title = "Lay",
     Callback = function()
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildOfClass("Humanoid")
-if not humanoid then return end
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
 
-humanoid.Sit = true
-wait(0.1)
+        humanoid.Sit = true
+        wait(0.1)
 
-local rootPart = character:FindFirstChild("HumanoidRootPart")
-if rootPart then
-    rootPart.CFrame = rootPart.CFrame * CFrame.Angles(math.pi * 0.5, 0, 0)
-end
+        local rootPart = char:FindFirstChild("HumanoidRootPart")
+        if rootPart then
+            rootPart.CFrame = rootPart.CFrame * CFrame.Angles(math.pi * 0.5, 0, 0)
+        end
 
-for _, animTrack in ipairs(humanoid:GetPlayingAnimationTracks()) do
-    animTrack:Stop()
-end
-end,
+        for _, animTrack in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            animTrack:Stop()
+        end
+    end,
 })
 
 UtilityTab:Toggle({
@@ -446,8 +444,8 @@ UtilityTab:Toggle({
 
 UserInputService.JumpRequest:Connect(function()
     if infiniteJumpEnabled then
-        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
         end
@@ -457,9 +455,9 @@ end)
 local noclipEnabled = false
 
 local function setNoclip(state)
-    local character = LocalPlayer.Character
-    if character then
-        for _, part in ipairs(character:GetDescendants()) do
+    local char = LocalPlayer.Character
+    if char then
+        for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = not state
             end
@@ -467,8 +465,7 @@ local function setNoclip(state)
     end
 end
 
-local noclipConnection
-noclipConnection = RunService.Stepped:Connect(function()
+local noclipConnection = RunService.Stepped:Connect(function()
     if noclipEnabled and LocalPlayer.Character then
         setNoclip(true)
     end
@@ -491,10 +488,11 @@ UtilityTab:Button({
         local placeId = game.PlaceId
         local jobId = game.JobId
         local success, result = pcall(function()
-            return TeleportService:TeleportAsync(placeId, { Players.LocalPlayer }, { jobId = jobId })
+            return TeleportService:TeleportAsync(placeId, { LocalPlayer }, { jobId = jobId })
         end)
         if not success then
-            Notify("Rejoin failed: ", "Failed to rejoin" .. tostring(result), 2.5)
+            Notify("Rejoin failed:", "Failed to rejoin "
+                    " .. tostring(result), 2.5)
         end
     end
 })
