@@ -40,7 +40,7 @@ local StatusSection = Window:Tab({
     Opened = true,
 })
 
-local UStuff = Window:Section({
+local PlayerSection = Window:Section({
     Title = "Player",
     Icon = nil,
     Opened = false,
@@ -104,7 +104,7 @@ local CopyJob = StatusSection:Button({
             setclipboard(game.JobId)
             Notify("Copied JobId", tostring(game.JobId), 2)
             CopyJob:SetTitle("Copied")
-            wait(1)
+            task.wait(1)
             CopyJob:SetTitle("Copy JobId")
         else
             Notify("Error", "Cannot copy", 2)
@@ -136,7 +136,7 @@ task.spawn(function()
     end
 end)
 
-local PlayerTab = UStuff:Tab({
+local PlayerTab = PlayerSection:Tab({
     Title = "Character",
     Opened = false,
 })
@@ -235,7 +235,7 @@ PlayerTab:Button({
     end,
 })
 
-local CamTab = UStuff:Tab({
+local CamTab = PlayerSection:Tab({
     Title = "Camera",
     Opened = false,
 })
@@ -255,7 +255,6 @@ CamTab:Toggle({
 CamTab:Button({
     Title = "Cam NoClip",
     Callback = function()
-        local camera = workspace.CurrentCamera
         local SetConstant = (debug and debug.setconstant) or setconstant
         local GetConstants = (debug and debug.getconstants) or getconstants
         local HasAdvancedAccess = (getgc and SetConstant and GetConstants)
@@ -309,7 +308,7 @@ CamTab:Button({
     end,
 })
 
-local UtilityTab = UStuff:Tab({
+local UtilityTab = PlayerSection:Tab({
     Title = "Utilities",
     Opened = false,
 })
@@ -329,7 +328,7 @@ UtilityTab:Button({
         if backpack then
             for _, tool in ipairs(backpack:GetChildren()) do
                 if tool:IsA("Tool") then
-                    tool.Parent = character
+                    tool.Parent = getChar()
                 end
             end
         end
@@ -343,16 +342,6 @@ local function toggleFreeze(value)
     if not char then return end
 
     isFrozen = value
-    for _, part in ipairs(char:GetChildren()) do
-        if part:IsA("BasePart") then
-            part.Anchored = isFrozen
-        end
-    end
-end
-
--- Initialize freeze state
-local char = getChar()
-if char then
     for _, part in ipairs(char:GetChildren()) do
         if part:IsA("BasePart") then
             part.Anchored = isFrozen
@@ -395,7 +384,7 @@ UtilityTab:Button({
         if not humanoid then return end
 
         humanoid.Sit = true
-        wait(0.1)
+        task.wait(0.1)
 
         local rootPart = char:FindFirstChild("HumanoidRootPart")
         if rootPart then
@@ -469,7 +458,9 @@ UtilityTab:Toggle({
     Value = false,
     Callback = function(state)
         noclipEnabled = state
-        if not noclipEnabled then
+        if noclipEnabled then
+            setNoclip(true)
+          else
             setNoclip(false)
         end
     end,
