@@ -309,7 +309,7 @@ CamTab:Button({
     end,
 })
 
-local Tab-Utility = UStuff:Tab({
+local UtilityTab = UStuff:Tab({
     Title = "Utilities",
     Opened = false,
 })
@@ -322,7 +322,7 @@ local function getChar()
     return LocalPlayer.Character
 end
 
-Tab-Utility:Button({
+UtilityTab:Button({
     Title = "Equip all",
     Callback = function()
         local backpack = getBp()
@@ -360,7 +360,7 @@ if char then
     end
 end
 
-Tab-Utility:Toggle({
+UtilityTab:Toggle({
     Title = "Freeze",
     Value = false,
     Callback = function(value)
@@ -376,7 +376,7 @@ LocalPlayer.CharacterAdded:Connect(function(newChar)
     end
 end)
 
-Tab-Utility:Button({
+UtilityTab:Button({
     Title = "Sit",
     Callback = function()
         local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -387,7 +387,7 @@ Tab-Utility:Button({
     end,
 })
 
-Tab-Utility:Button({
+UtilityTab:Button({
     Title = "Lay",
     Callback = function()
         local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -408,7 +408,7 @@ Tab-Utility:Button({
     end,
 })
 
-Tab-Utility:Toggle({
+UtilityTab:Toggle({
     Title = "Night",
     Value = false,
     Callback = function(On)
@@ -426,7 +426,7 @@ Tab-Utility:Toggle({
 
 local infiniteJumpEnabled = false
 
-Tab-Utility:Toggle({
+UtilityTab:Toggle({
     Title = "Infinite Jump",
     Desc = "Enables infinite jumping.",
     Value = false,
@@ -464,7 +464,7 @@ local noclipConnection = RunService.Stepped:Connect(function()
     end
 end)
 
-Tab-Utility:Toggle({
+UtilityTab:Toggle({
     Title = "Noclip",
     Value = false,
     Callback = function(state)
@@ -475,7 +475,7 @@ Tab-Utility:Toggle({
     end,
 })
 
-Tab-Utility:Button({
+UtilityTab:Button({
     Title = "Rejoin",
     Callback = function()
         local placeId = game.PlaceId
@@ -485,12 +485,12 @@ Tab-Utility:Button({
         end)
         if not success then
             Notify("Rejoin failed:", "Failed to rejoin "
-                    " .. tostring(result), 2.5)
+                 .. tostring(result), 2.5)
         end
     end
 })
 
-Tab-Utility:Button({
+UtilityTab:Button({
     Title = "Leave Game",
     Callback = function()
         WindUI:Popup({
