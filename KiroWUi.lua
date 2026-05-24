@@ -1,19 +1,12 @@
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local StarterGui = game:GetService("StarterGui")
-local TeleportService = game:GetService("TeleportService")
-local MarketplaceService = game:GetService("MarketplaceService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Lighting = game:GetService("Lighting")
-local TweenService = game:GetService("TweenService")
-
 local LocalPlayer = Players.LocalPlayer
 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local playerGui = LocalPlayer:WaitForChild("PlayerGui")
-playerGui.ScreenOrientation = Enum.ScreenOrientation.LandscapeSensor
 
-local GrowGame = 126884695634066
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local TeleportService = game:GetService("TeleportService")
+local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
@@ -27,10 +20,10 @@ local function Notify(title, context, duration)
 end
 
 local Window = WindUI:CreateWindow({
-    Title = "KuroWindUi",
+    Title = "KiroWindUi",
     IconThemed = false,
     Author = "Made by Kiro.",
-    Folder = "KuroWindUi",
+    Folder = "KuroWUi",
     Size = UDim2.fromOffset(580, 460),
     Transparent = true,
     Theme = "Dark",
@@ -45,6 +38,12 @@ local Window = WindUI:CreateWindow({
 local StatusSection = Window:Tab({
     Title = "Server",
     Opened = true,
+})
+
+local UStuff = Window:Section({
+    Title = "Player",
+    Icon = nil,
+    Opened = false,
 })
 
 local JID = nil
@@ -136,12 +135,6 @@ task.spawn(function()
         CJobId:SetTitle("Current JobId | " .. tostring(game.JobId))
     end
 end)
-
-local UStuff = Window:Section({
-    Title = "Player",
-    Icon = nil,
-    Opened = false,
-})
 
 local PlayerTab = UStuff:Tab({
     Title = "Character",
@@ -316,7 +309,7 @@ CamTab:Button({
     end,
 })
 
-local UtilityTab = UStuff:Tab({
+local Tab-Utility = UStuff:Tab({
     Title = "Utilities",
     Opened = false,
 })
@@ -329,7 +322,7 @@ local function getChar()
     return LocalPlayer.Character
 end
 
-UtilityTab:Button({
+Tab-Utility:Button({
     Title = "Equip all",
     Callback = function()
         local backpack = getBp()
@@ -367,7 +360,7 @@ if char then
     end
 end
 
-UtilityTab:Toggle({
+Tab-Utility:Toggle({
     Title = "Freeze",
     Value = false,
     Callback = function(value)
@@ -383,7 +376,7 @@ LocalPlayer.CharacterAdded:Connect(function(newChar)
     end
 end)
 
-UtilityTab:Button({
+Tab-Utility:Button({
     Title = "Sit",
     Callback = function()
         local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -394,7 +387,7 @@ UtilityTab:Button({
     end,
 })
 
-UtilityTab:Button({
+Tab-Utility:Button({
     Title = "Lay",
     Callback = function()
         local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -415,7 +408,7 @@ UtilityTab:Button({
     end,
 })
 
-UtilityTab:Toggle({
+Tab-Utility:Toggle({
     Title = "Night",
     Value = false,
     Callback = function(On)
@@ -433,7 +426,7 @@ UtilityTab:Toggle({
 
 local infiniteJumpEnabled = false
 
-UtilityTab:Toggle({
+Tab-Utility:Toggle({
     Title = "Infinite Jump",
     Desc = "Enables infinite jumping.",
     Value = false,
@@ -471,7 +464,7 @@ local noclipConnection = RunService.Stepped:Connect(function()
     end
 end)
 
-UtilityTab:Toggle({
+Tab-Utility:Toggle({
     Title = "Noclip",
     Value = false,
     Callback = function(state)
@@ -482,7 +475,7 @@ UtilityTab:Toggle({
     end,
 })
 
-UtilityTab:Button({
+Tab-Utility:Button({
     Title = "Rejoin",
     Callback = function()
         local placeId = game.PlaceId
@@ -497,7 +490,7 @@ UtilityTab:Button({
     end
 })
 
-UtilityTab:Button({
+Tab-Utility:Button({
     Title = "Leave Game",
     Callback = function()
         WindUI:Popup({
