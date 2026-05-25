@@ -530,12 +530,6 @@ Youtube:Paragraph({
                 Notify("Error", "setclipboard not supported", 2.5)
             end
         end
-    },
-    {
-      Title "Kill",
-      Callback = function()
-        print("Why")
-        end
     }
   }
 })
