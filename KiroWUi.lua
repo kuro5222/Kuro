@@ -511,7 +511,7 @@ UtilityTab:Button({
     end,
 })
 
-local Youtube = OtherInfo:Tab({Title = "Youtube", Icon = "Play" })
+local Youtube = OtherInfo:Tab({Title = "Youtube", Icon = "Play", })
 local Tiktok = OtherInfo:Tab({Title = "Tiktok"})
 local Discord = OtherInfo:Tab({Title = "Discord"})
 
