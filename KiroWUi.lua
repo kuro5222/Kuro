@@ -511,11 +511,11 @@ UtilityTab:Button({
     end,
 })
 
-local Youtube = OtherInfo:Tab({Title = "Youtube", Icon = "Play", })
+local YoutubeT = OtherInfo:Tab({Title = "YoutTTTube", Icon = "Play", })
 local Tiktok = OtherInfo:Tab({Title = "Tiktok"})
 local Discord = OtherInfo:Tab({Title = "Discord"})
 
-Youtube:Paragraph({
+YoutubeT:Paragraph({
   Title = "Youtube",
   Desc = "Click to copy link",
   Buttons = {
