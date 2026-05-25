@@ -511,7 +511,23 @@ UtilityTab:Button({
     end,
 })
 
-OtherInfo:Tab({
+local Youtube = OtherInfo:Tab({Title = "Youtube"})
+local Tiktok = OtherInfo:Tab({Title = "Tiktok"})
+local Discord = OtherInfo:Tab({Title = "Discord"})
+
+Youtube:Paragraph({
   Title = "Youtube",
+  Desc = "Click to copy link",
   Icon = "Play",
+  Buttons = ({
+    Title = "Copy",
+    Callback = function ()
+          if setclipboard then
+              setclipboard("TEXT_TO_COPY_HERE")
+              Notify("Succedd!", "copied successfully", 2.5)
+          else
+              Notify("Error", "setclipboard not supported", 2.5)
+          end
+      end
+  })
 })
