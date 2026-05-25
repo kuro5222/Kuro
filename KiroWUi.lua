@@ -519,15 +519,23 @@ Youtube:Paragraph({
   Title = "Youtube",
   Desc = "Click to copy link",
   Icon = "Play",
-  Buttons = ({
-    Title = "Copy",
-    Callback = function ()
-          if setclipboard then
-              setclipboard("TEXT_TO_COPY_HERE")
-              Notify("Succedd!", "copied successfully", 2.5)
-          else
-              Notify("Error", "setclipboard not supported", 2.5)
-          end
-      end
-  })
+  Buttons = {
+      {
+      Title = "Copy",
+      Callback = function ()
+            if setclipboard then
+                setclipboard("TEXT_TO_COPY_HERE")
+                Notify("Succedd!", "copied successfully", 2.5)
+            else
+                Notify("Error", "setclipboard not supported", 2.5)
+            end
+        end
+    },
+    {
+      Title "Kill",
+      Callback = function()
+        print("Why")
+        end
+    }
+  }
 })
