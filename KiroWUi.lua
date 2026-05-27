@@ -161,8 +161,11 @@ local function getPlr(name)
     return foundPlayers
 end
 
-PlayerTab:Input({
+local FuhPass = "KennyCapuz"
+
+local goto = PlayerTab:Input({
   Title = "Goto",
+  Locked = true,
   Placeholder = "Enter Name",
   Flag = "goto",
   Callback = function(inputValue)
@@ -185,7 +188,21 @@ PlayerTab:Input({
         else
             Notify("Teleport Failed", "Could not find the target or your character parts.", 2.5)
         end
-    end,
+    end
+})
+
+PlayerTab:Input({
+    Title = "Password",
+    Placeholder = "Input password for Goto",
+    Flag = "gotopass",
+    Callback = function(passwordInput)
+        if passwordInput == FuhPass then
+            goto:SetLocked(false)
+            Notify("Password Correct", "Goto is now unlocked", 2)
+        else
+            Notify("Wrong Password", "Try again", 2)
+        end
+    end
 })
 
 local WalkS = PlayerTab:Slider({
