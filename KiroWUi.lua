@@ -23,7 +23,7 @@ local Window = WindUI:CreateWindow({
     Title = "KiroWindUi",
     IconThemed = false,
     Author = "Made by Kiro.",
-    Folder = "KuroWUi",
+    Folder = "KiroWUi",
     Size = UDim2.fromOffset(580, 460),
     Transparent = true,
     Theme = "Dark",
@@ -46,7 +46,7 @@ local PlayerSection = Window:Section({
     Opened = false,
 })
 
-local OtherInfo = Window:Section({
+local OtherInfo = Window:Tab({
     Title = "More Info",
     Icon = "info",
 })
@@ -472,6 +472,29 @@ UtilityTab:Toggle({
 })
 
 UtilityTab:Button({
+  Title = "Fly",
+  Callback = function()
+        WindUI:Popup({
+          Title = "Fly Gui",
+          Icon = "info",
+          Content = "Run fly gui?",
+          Buttons = {
+            {
+              Title = "No",
+              Variant = "Tertiary",
+            },
+            {
+              Title = "Yes",
+              Callback = function()
+                loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/kiro-git/Kuro/main/fly%20gui.lua"))()
+                end,
+            }
+          }
+        })
+    end,
+})
+
+UtilityTab:Button({
     Title = "Rejoin",
     Callback = function()
         local placeId = game.PlaceId
@@ -511,24 +534,7 @@ UtilityTab:Button({
     end,
 })
 
-local YoutubeT = OtherInfo:Tab({Title = "YoutTTTube", Icon = "Play", })
-local Tiktok = OtherInfo:Tab({Title = "Tiktok"})
-local Discord = OtherInfo:Tab({Title = "Discord"})
-
-YoutubeT:Paragraph({
-  Title = "Youtube",
-  Desc = "Click to copy link",
-  Buttons = {
-      {
-      Title = "Copy",
-      Callback = function ()
-            if setclipboard then
-                setclipboard("TEXT_TO_COPY_HERE")
-                Notify("Succedd!", "copied successfully", 2.5)
-            else
-                Notify("Error", "setclipboard not supported", 2.5)
-            end
-        end
-    }
-  }
+OtherInfo:Paragraph({
+  Title = "Paragraph i guess?",
+  
 })
