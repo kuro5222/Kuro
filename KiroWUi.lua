@@ -268,34 +268,68 @@ PlayerTab:Button({
     end,
 })
 
-PlayerTab:Button({
+local outlineEnabled = false
+local playerConnections = {}
+local highlightedPlayers = {}
+
+local function removeHighlights()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character then
+            local highlight = player.Character:FindFirstChildOfClass("Highlight")
+            if highlight then
+                highlight:Destroy()
+            end
+        end
+    end
+    highlightedPlayers = {}
+end
+
+local function applyHighlight(player)
+    if not outlineEnabled then return end
+    
+    local function onCharacterAdded(character)
+        if not outlineEnabled then return end
+        
+        local highlight = Instance.new("Highlight")
+        highlight.Parent = character
+        highlight.Archivable = true
+        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        highlight.Enabled = true
+        highlight.FillColor = Color3.fromRGB(128, 128, 128)
+        highlight.OutlineColor = Color3.fromRGB(100, 100, 100)
+        highlight.FillTransparency = 1
+        highlight.OutlineTransparency = 1
+    end
+
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+
+    if not playerConnections[player] then
+        playerConnections[player] = player.CharacterAdded:Connect(onCharacterAdded)
+    end
+end
+
+PlayerTab:Toggle({
     Title = "Outline Players",
-    Callback = function()
-        local function applyHighlight(player)
-            local function onCharacterAdded(char)
-                local highlight = Instance.new("Highlight")
-                highlight.Parent = char
-                highlight.Archivable = true
-                highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                highlight.Enabled = true
-                highlight.FillColor = Color3.fromRGB(128, 128, 128)
-                highlight.OutlineColor = Color3.fromRGB(100, 100, 100)
-                highlight.FillTransparency = 1
-                highlight.OutlineTransparency = 1
+    Value = false,
+    Callback = function(state)
+        outlineEnabled = state
+        
+        if state then
+            for _, player in pairs(Players:GetPlayers()) do
+                applyHighlight(player)
             end
-
-            if player.Character then
-                onCharacterAdded(player.Character)
+            Players.PlayerAdded:Connect(applyHighlight)
+            Notify("Outline", "Enabled", 1.5)
+        else
+            removeHighlights()
+            for player, connection in pairs(playerConnections) do
+                connection:Disconnect()
             end
-
-            player.CharacterAdded:Connect(onCharacterAdded)
+            playerConnections = {}
+            Notify("Outline", "Disabled", 1.5)
         end
-
-        for _, player in pairs(Players:GetPlayers()) do
-            applyHighlight(player)
-        end
-
-        Players.PlayerAdded:Connect(applyHighlight)
     end,
 })
 
