@@ -161,7 +161,7 @@ local function getPlr(name)
     return foundPlayers
 end
 
-Goto = PlayerTab:Input({
+PlayerTab:Input({
   Title = "Goto",
   Placeholder = "Enter Name",
   Flag = "goto",
