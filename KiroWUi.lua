@@ -146,6 +146,48 @@ local PlayerTab = PlayerSection:Tab({
     Opened = false,
 })
 
+local function getPlr(name)
+    local foundPlayers = {}
+    local searchNameLower = string.lower(name)
+    for _, plr in ipairs(Players:GetPlayers()) do
+        local usernameLower = string.lower(plr.Name)
+        local displayNameLower = plr.DisplayName and string.lower(plr.DisplayName)
+        local usernameMatch = string.find(usernameLower, searchNameLower, 1, true)
+        local displayNameMatch = displayNameLower and string.find(displayNameLower, searchNameLower, 1, true)
+        if usernameMatch or displayNameMatch then
+            table.insert(foundPlayers, plr)
+        end
+    end
+    return foundPlayers
+end
+
+Goto = PlayerTab:Input({
+  Title = "Goto",
+  Placeholder = "Enter Name",
+  Flag = "goto",
+  Callback = function(inputvalue)
+      local targetPlayers = getPlr(inputValue)
+        if #targetPlayers == 0 then
+            Notify("Player " .. inputValue, "NOT FOUND", 2.5)
+            return
+        end
+
+        local targetPlayer = targetPlayers[1]
+        local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+        local targetRoot = targetCharacter:FindFirstChild("HumanoidRootPart")
+
+        local myCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local myRoot = myCharacter:FindFirstChild("HumanoidRootPart")
+
+        if targetRoot and myRoot then
+            myRoot.CFrame = targetRoot.CFrame + Vector3.new(0, 5, 0)
+            Notify("Teleported to " .. targetPlayer.Name, "SUCCESS", 2.5)
+        else
+            Notify("Teleport Failed", "Could not find the target or your character parts.", 2.5)
+        end
+    end,
+})
+
 local WalkS = PlayerTab:Slider({
     Title = "WalkSpeed",
     Step = 1,
