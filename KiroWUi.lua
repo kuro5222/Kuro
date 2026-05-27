@@ -165,7 +165,7 @@ Goto = PlayerTab:Input({
   Title = "Goto",
   Placeholder = "Enter Name",
   Flag = "goto",
-  Callback = function(inputvalue)
+  Callback = function(inputValue)
       local targetPlayers = getPlr(inputValue)
         if #targetPlayers == 0 then
             Notify("Player " .. inputValue, "NOT FOUND", 2.5)
