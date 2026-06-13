@@ -1,6 +1,11 @@
 --Made by Leadmarker
 local TweenService = game:GetService('TweenService')
 
+local TColor = {
+   red = Color3.fromRGB(250, 50, 50),
+   blue = Color3.fromRGB(50, 250, 50)
+}
+
 if not _G.noti_stack then _G.noti_stack = {} end
 if not _G.noti_gui then
     local screen_gui = Instance.new('ScreenGui')
@@ -21,7 +26,7 @@ local function refreshPositions()
     end
 end
 
-local function notify(name, time)
+local function notify(name, time, TColor)
     local name, time = name or 'Notify', time or 3
 
     local label = Instance.new('TextLabel')
@@ -30,10 +35,10 @@ local function notify(name, time)
     label.BackgroundTransparency = 1.000
     label.BorderSizePixel = 0
     label.Position = UDim2.new(0.5, 0, BASE_Y, 0)
-    label.Size = UDim2.new(0, 0, 0, 20)
+    label.Size = UDim2.new(0, 0, 0, 30)
     label.Font = Enum.Font.Code
     label.Text = name
-    label.TextColor3 = Color3.fromRGB(235, 235, 235)
+    label.TextColor3 = TextColor
     label.TextSize = 12.000
     label.TextStrokeTransparency = 0.000
     label.TextXAlignment = Enum.TextXAlignment.Left
@@ -50,7 +55,7 @@ local function notify(name, time)
 
     task.delay(time, function()
         local tween = TweenService:Create(label, TweenInfo.new(.25), {
-            Size = UDim2.new(0, 0, 0, 20)
+            Size = UDim2.new(0, 0, 0, 30)
         })
         tween:Play()
         tween.Completed:Wait()
